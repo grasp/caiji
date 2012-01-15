@@ -1,0 +1,114 @@
+<%= form_for(@cargo_rule) do |f| %>
+  <% if @cargo_rule.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cargo_rule.errors.count, "error") %> prohibited this cargo_rule from being saved:</h2>
+
+      <ul>
+      <% @cargo_rule.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :sitename %><br />
+    <%= f.text_field :sitename %>
+  </div>
+  <div class="field">
+    <%= f.label :rulename %><br />
+    <%= f.text_field :rulename %>
+  </div>
+  <div class="field">
+    <%= f.label :nextpage %><br />
+    <%= f.text_field :nextpage%>
+  </div>
+  <div class="field">
+    <%= f.label :mainurl %><br />
+    <%= f.text_field :mainurl %>
+  </div>
+  <div class="field">
+    <%= f.label :maincss %><br />
+    <%= f.text_field :maincss %>
+  </div>
+  <div class="field">
+    <%= f.label :suburl %><br />
+    <%= f.text_field :suburl %>
+  </div>
+  <div class="field">
+    <%= f.label :subcss %><br />
+    <%= f.text_field :subcss %>
+  </div>
+  <div class="field">
+    <%= f.label :caiji_freq %><br />
+    <%= f.number_field :caiji_freq %>
+  </div>
+  <div class="field">
+    <%= f.label :need_post %><br />
+    <%= f.check_box :need_post %>
+  </div>
+  <div class="field">
+    <%= f.label :post_freq %><br />
+    <%= f.number_field :post_freq %>
+  </div>
+  <div class="field">
+    <%= f.label :fail_report %><br />
+    <%= f.check_box :fail_report %>
+  </div>
+  <div class="field">
+    <%= f.label :report_email %><br />
+    <%= f.text_field :report_email %>
+  </div>
+  <div class="field">
+    <%= f.label :report_phone %><br />
+    <%= f.text_field :report_phone %>
+  </div>
+  <div class="field">
+    <%= f.label :fcity_name %><br />
+    <%= f.text_field :fcity_name %>
+  </div>
+  <div class="field">
+    <%= f.label :tcity_name %><br />
+    <%= f.text_field :tcity_name %>
+  </div>
+  <div class="field">
+    <%= f.label :cargo_weight %><br />
+    <%= f.text_field :cargo_weight %>
+  </div>
+  <div class="field">
+    <%= f.label :cargo_bulk %><br />
+    <%= f.text_field :cargo_bulk %>
+  </div>
+  <div class="field">
+    <%= f.label :cate_name %><br />
+    <%= f.text_field :cate_name %>
+  </div>
+  <div class="field">
+    <%= f.label :mobilephone %><br />
+    <%= f.text_field :mobilephone %>
+  </div>
+  <div class="field">
+    <%= f.label :fixphone %><br />
+    <%= f.text_field :fixphone %>
+  </div>
+  <div class="field">
+    <%= f.label :contact %><br />
+    <%= f.text_field :contact %>
+  </div>
+  <div class="field">
+    <%= f.label :company %><br />
+    <%= f.text_field :company %>
+  </div>
+  <div class="field">
+    <%= f.label :comments %><br />
+    <%= f.text_field :comments %>
+  </div>
+  <div class="field">
+    <%= f.label :timetag %><br />
+    <%= f.text_field :timetag %>
+  </div>
+ 
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

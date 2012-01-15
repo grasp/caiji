@@ -1,0 +1,31 @@
+<h1>原始数据采集报告-</h1>
+<p>
+ sitename= <%=@cargo_rule.sitename%>  ruelename=<%=@cargo_rule.rulename%>
+  total page:<%=@page_count%> ,total capture=<%=@all_raw_cargo.size%>
+  
+  
+</p>
+<table>
+  <th>出发城市</th>
+  <th>到达城市</th>
+     <th>货物</th>
+     <th>重量</th>
+
+
+    <th>联系</th>
+     <th>备注</th>
+<% @all_raw_cargo.each do |cargo|%>
+     <tr>
+       <td><%=cargo[:fcity_name]%>-<%=cargo[:fcity_code]%></td>
+        <td><%=cargo[:tcity_name]%>-<%=cargo[:tcity_code]%></td>
+         <td><%=cargo[:cate_name]%></td>
+         <td><%=cargo[:cargo_weight]%></td>
+          <td><%=cargo[:contact]%></td>
+           <td><%=cargo[:comments]%></td>
+       </tr> 
+<%end%>
+  </table>
+
+
+
+
