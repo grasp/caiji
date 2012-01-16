@@ -1,11 +1,13 @@
+#coding:utf-8
 class CargoRulesController < ApplicationController
   # GET /cargo_rules
   # GET /cargo_rules.json
   include CargoRulesHelper
+  include Qq56Helper
   layout 'caiji'
   def index
+      @title="采集零距离"
     @cargo_rules = CargoRule.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @cargo_rules }
@@ -93,12 +95,20 @@ class CargoRulesController < ApplicationController
   end
   
   def run_cargo_rule
+  
     puts "params[:id]=#{params[:id]}"
     @cargo_rule=CargoRule.find(params[:id])
+      @title="#{@cargo_rule.rulename}运行结果"
     run_cargorule
     respond_to do |format|
       format.html 
       format.json { head :no_content }
     end
+  end
+  
+  def get_all_cargo
+     @title="#{params[:from_site]}全部采集结果"
+    @cargos=Cargo.where(:from_site=>params[:from_site]).desc(:created_at).paginate(:page=>params[:page]||1,:per_page=>100) 
+    @count=Cargo.where(:from_site=>params[:from_site]).count
   end
 end

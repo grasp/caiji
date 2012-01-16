@@ -2,27 +2,17 @@
 <p>
   城市数量 <%=City.count%>
 </p>
-<h1>Listing cargo_rules</h1>
 
+<h1>Listing cargo_rules</h1>
 <table>
   <tr>
     <th>Runrule</th>
      <th>Editrule</th>
+     <th>Cargos</th>
     <th>Sitename</th>
     <th>Rulename</th>
     <th>maincss</th>
-    <th>subcss</th>
-     <th>Fcityname</th>
-    <th>Tcityname</th>
-    <th>Cweight</th>
-    <th>Cbulk</th>
-    <th>Cate name</th>
-    <th>Mphone</th>
-    <th>Fixphone</th>
-    <th>Contact</th>
-    <th>Company</th>
-    <th>Comments</th>
-    <th>Timetag</th>
+    <th>subcss</th>    
 
     <th>Caijifreq</th>
     <th>Needpost</th>
@@ -46,23 +36,14 @@
 
 <% @cargo_rules.each do |cargo_rule| %>
   <tr>
-     <td><a href="/cargo_rules/run_cargo_rule/<%=cargo_rule.id%>" class="btn default">Runrule</a></td>
+     <td><a href="/cargo_rules/run_cargo_rule/<%=cargo_rule.id%>" target="_blank" class="btn default">Runrule</a></td>
       <td><%= link_to 'Edit', edit_cargo_rule_path(cargo_rule) ,:class => "btn default"%></td>
+        <td><a href="/cargo_rules/get_all_cargo/<%=cargo_rule.sitename%>"target="_blank"  class="btn default">Cargos</a></td>
     <td><%= cargo_rule.sitename %></td>
     <td><%= cargo_rule.rulename %></td>
     <td><%= cargo_rule.maincss %></td>
     <td><%= cargo_rule.subcss %></td>
-    <td><%= cargo_rule.fcity_name %></td>
-    <td><%= cargo_rule.tcity_name %></td>
-    <td><%= cargo_rule.cargo_weight %></td>
-    <td><%= cargo_rule.cargo_bulk %></td>
-    <td><%= cargo_rule.cate_name %></td>
-    <td><%= cargo_rule.mobilephone %></td>
-    <td><%= cargo_rule.fixphone %></td>
-    <td><%= cargo_rule.contact %></td>
-    <td><%= cargo_rule.company %></td>
-    <td><%= cargo_rule.comments %></td>
-    <td><%= cargo_rule.timetag %></td>
+ 
   
     <td><%= cargo_rule.caiji_freq %></td>
     <td><%= cargo_rule.need_post %></td>

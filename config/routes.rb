@@ -1,8 +1,7 @@
 Caiji::Application.routes.draw do
     match '/cargo_rules/run_cargo_rule/:id' => 'cargo_rules#run_cargo_rule'
+    match '/cargo_rules/get_all_cargo/:from_site' => 'cargo_rules#get_all_cargo'
   resources :cargo_rules
-
-  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
