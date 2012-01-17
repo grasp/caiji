@@ -9,26 +9,25 @@
     <th>Runrule</th>
      <th>Editrule</th>
      <th>Cargos</th>
+      <th>Post</th>
     <th>Sitename</th>
     <th>Rulename</th>
-    <th>maincss</th>
-    <th>subcss</th>    
+ 
 
     <th>Caijifreq</th>
     <th>Needpost</th>
     <th>Postfreq</th>
     <th>Failreport</th>
     <th>Remail</th>
-    <th>Rphone</th>
-   
-    <th>Tcaiji</th>
+    <th>Rphone</th>   
+    <th>Totalcaiji</th>
+    <th>Totalpost</th>
     <th>Today</th>
     <th>Week</th>
     <th>Mongth</th>
     <th>Year</th>
     <th>Repeat</th>
-    <th>Mainurl</th>
-    <th>Suburl</th>
+
     <th></th>
     <th></th>
     <th></th>
@@ -36,14 +35,13 @@
 
 <% @cargo_rules.each do |cargo_rule| %>
   <tr>
-     <td><a href="/cargo_rules/run_cargo_rule/<%=cargo_rule.id%>" target="_blank" class="btn default">Runrule</a></td>
-      <td><%= link_to 'Edit', edit_cargo_rule_path(cargo_rule) ,:class => "btn default"%></td>
-        <td><a href="/cargo_rules/get_all_cargo/<%=cargo_rule.sitename%>"target="_blank"  class="btn default">Cargos</a></td>
+     <td><a href="/cargo_rules/run_cargo_rule/<%=cargo_rule.id%>" target="_blank" class="btn default">Run</a></td>
+     <td><%= link_to 'Edit', edit_cargo_rule_path(cargo_rule) ,:class => "btn default"%></td>
+    <td><a href="/cargo_rules/get_all_cargo/<%=cargo_rule.sitename%>"target="_blank"  class="btn default">Cargos</a></td>
+     <td><a href="/cargo_rules/post_cargo/<%=cargo_rule.sitename%>"target="_blank"  class="btn default">Post</a></td>
     <td><%= cargo_rule.sitename %></td>
     <td><%= cargo_rule.rulename %></td>
-    <td><%= cargo_rule.maincss %></td>
-    <td><%= cargo_rule.subcss %></td>
- 
+
   
     <td><%= cargo_rule.caiji_freq %></td>
     <td><%= cargo_rule.need_post %></td>
@@ -52,14 +50,14 @@
     <td><%= cargo_rule.report_email %></td>
     <td><%= cargo_rule.report_phone %></td>
    
-    <td><%= cargo_rule.total_caiji %></td>
-    <td><%= cargo_rule.today_count %></td>
-    <td><%= cargo_rule.week_count %></td>
-    <td><%= cargo_rule.mongth_count %></td>
-    <td><%= cargo_rule.year_count %></td>
+    <td><%=Cargo.where(:from_site=>cargo_rule.sitename).count%>
+    <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:posted=>"yes").count%>
+     <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_day).count%>
+     <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_week).count%>
+  <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_month).count%>
+ <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_year).count%>
     <td><%= cargo_rule.repeat_count %></td>
-      <td><%= cargo_rule.mainurl %></td>
-    <td><%= cargo_rule.suburl %></td>
+
     <td><%= link_to 'Show', cargo_rule %></td>
    
     <td><%= link_to 'Destroy', cargo_rule, confirm: 'Are you sure?', method: :delete %></td>

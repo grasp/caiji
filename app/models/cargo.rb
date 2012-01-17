@@ -4,9 +4,7 @@ class  Cargo
   include Mongoid::Timestamps
   include CitiesHelper
   include CargosHelper
-  # cattr_reader :per_page
-  # @@per_page = 20      
-  # cargo self info
+
   field :cargo_weight, :type=>String
   field :cargo_zuhuo, :type=>String
   field :cargo_bulk, :type=>String
@@ -39,7 +37,8 @@ class  Cargo
   # from site
   field :from_site, :type=>String
   field :priority, :type=>Integer #show priority
-     field :timetag    
+  field :timetag    
+  field :posted, :type=>String
   #tousu and jubao
 
       

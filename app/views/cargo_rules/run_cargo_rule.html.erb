@@ -8,13 +8,14 @@
   <th>出发城市</th>
   <th>到达城市</th>
     <th>线路</th>
-        <th>timetag</th>
+     <th>timetag</th>
      <th>货物</th>
      <th>重量</th>
     <th>联系</th>
      <th>备注</th>
      <th>固定电话</th>
      <th>移动电话</th>
+
 <% @all_raw_cargo.each do |cargo|%>
      <tr>
        <td><%=cargo[:fcity_name]%>-<%=cargo[:fcity_code]%></td>
@@ -22,11 +23,12 @@
          <td><%=cargo[:line]%></td>
            <td><%=cargo[:timetag]%></td>
          <td><%=cargo[:cate_name]%></td>
-         <td><%=cargo[:cargo_weight]%></td>
+         <td><%=cargo[:cargo_weight]%><%=cargo[:price]%></td>
           <td><%=cargo[:contact]%></td>
            <td><%=cargo[:comments]%></td>
            <td><%=cargo[:fixphone]%></td>
            <td><%=cargo[:mobilephone]%></td>
+
        </tr> 
 <%end%>
   </table>

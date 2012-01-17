@@ -111,4 +111,8 @@ class CargoRulesController < ApplicationController
     @cargos=Cargo.where(:from_site=>params[:from_site]).desc(:created_at).paginate(:page=>params[:page]||1,:per_page=>100) 
     @count=Cargo.where(:from_site=>params[:from_site]).count
   end
+  
+  def post_cargo
+    post_cargo_helper
+  end
 end
