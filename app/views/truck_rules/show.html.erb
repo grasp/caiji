@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Sitename:</b>
+  <%= @truck_rule.sitename %>
+</p>
+
+<p>
+  <b>Rulename:</b>
+  <%= @truck_rule.rulename %>
+</p>
+
+<p>
+  <b>Caiji freq:</b>
+  <%= @truck_rule.caiji_freq %>
+</p>
+
+<p>
+  <b>Need post:</b>
+  <%= @truck_rule.need_post %>
+</p>
+
+<p>
+  <b>Post freq:</b>
+  <%= @truck_rule.post_freq %>
+</p>
+
+<p>
+  <b>Fail report:</b>
+  <%= @truck_rule.fail_report %>
+</p>
+
+<p>
+  <b>Report email:</b>
+  <%= @truck_rule.report_email %>
+</p>
+
+<p>
+  <b>Report phone:</b>
+  <%= @truck_rule.report_phone %>
+</p>
+
+<p>
+  <b>Total caiji:</b>
+  <%= @truck_rule.total_caiji %>
+</p>
+
+<p>
+  <b>Today count:</b>
+  <%= @truck_rule.today_count %>
+</p>
+
+<p>
+  <b>Week count:</b>
+  <%= @truck_rule.week_count %>
+</p>
+
+<p>
+  <b>Mongth count:</b>
+  <%= @truck_rule.mongth_count %>
+</p>
+
+<p>
+  <b>Year count:</b>
+  <%= @truck_rule.year_count %>
+</p>
+
+<p>
+  <b>Repeat count:</b>
+  <%= @truck_rule.repeat_count %>
+</p>
+
+
+<%= link_to 'Edit', edit_truck_rule_path(@truck_rule) %> |
+<%= link_to 'Back', truck_rules_path %>

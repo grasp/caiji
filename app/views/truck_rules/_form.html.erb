@@ -1,10 +1,10 @@
-<%= form_for(@cargo_rule) do |f| %>
-  <% if @cargo_rule.errors.any? %>
+<%= form_for(@truck_rule) do |f| %>
+  <% if @truck_rule.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@cargo_rule.errors.count, "error") %> prohibited this cargo_rule from being saved:</h2>
+      <h2><%= pluralize(@truck_rule.errors.count, "error") %> prohibited this truck_rule from being saved:</h2>
 
       <ul>
-      <% @cargo_rule.errors.full_messages.each do |msg| %>
+      <% @truck_rule.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
@@ -19,7 +19,6 @@
     <%= f.label :rulename %><br />
     <%= f.text_field :rulename %>
   </div>
-  
   <div class="field">
     <%= f.label :caiji_freq %><br />
     <%= f.number_field :caiji_freq %>
@@ -44,7 +43,30 @@
     <%= f.label :report_phone %><br />
     <%= f.text_field :report_phone %>
   </div>
- 
+  <div class="field">
+    <%= f.label :total_caiji %><br />
+    <%= f.number_field :total_caiji %>
+  </div>
+  <div class="field">
+    <%= f.label :today_count %><br />
+    <%= f.number_field :today_count %>
+  </div>
+  <div class="field">
+    <%= f.label :week_count %><br />
+    <%= f.number_field :week_count %>
+  </div>
+  <div class="field">
+    <%= f.label :mongth_count %><br />
+    <%= f.number_field :mongth_count %>
+  </div>
+  <div class="field">
+    <%= f.label :year_count %><br />
+    <%= f.number_field :year_count %>
+  </div>
+  <div class="field">
+    <%= f.label :repeat_count %><br />
+    <%= f.number_field :repeat_count %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

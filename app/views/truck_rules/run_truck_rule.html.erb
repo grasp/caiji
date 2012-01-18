@@ -1,0 +1,27 @@
+<h1>Run Truck rule result</h1>
+
+<table>
+  <th>牌照</th>
+  <th>吨位</th>
+  <th>车长</th>
+   <th>出发地</th>
+    <th>到达地</th>
+    <th>线路</th>
+   <th>contact</th>
+    <th>comments</th>
+      <th>mphone</th>
+<%@all_raw_truck.each do |truck|%>
+  <tr>
+   <td><%=truck[:paizhao]%></td>
+    <td><%=truck[:dunwei]%></td>
+     <td><%=truck[:length]%></td>
+      <td><%=truck[:fcity_name]%></td>
+       <td><%=truck[:tcity_name]%></td>
+        <td><%=truck[:line]%></td>
+    <td><%=truck[:contact]%></td>
+     <td><%=truck[:comments]%></td>
+      <td><%=truck[:mobilephone]%></td>
+  </tr>
+<%end%>
+  
+  </table>

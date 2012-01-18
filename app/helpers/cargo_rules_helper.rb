@@ -1,46 +1,17 @@
 #coding:utf-8
 module CargoRulesHelper
-  def prepare_for_rule
-    @logger=Logger.new("cargorule.log")
-    @mechanize=Mechanize.new
-    @mechanizeb=Mechanize.new
-    @office=true
-    @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
-    @mechanizeb.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
-    @mechanize.cookie_jar.load_cookiestxt(StringIO.new($cookie))  
-    @mechanize.user_agent_alias = 'Windows Mozilla'
-  end
-  
-  def set_cookie(domain,name,value)
-    cookie = Mechanize::Cookie.new(name, value)
-    cookie.domain = domain
-    cookie.path = "/"
-    @mechanize.cookie_jar.add(@mechanize.history.last.uri,cookie) #we have to run get before we set cookie ,otherwise will have nil error
-  end
-  
-  def city_parse(from_city,to_city)
-    city_array=Array.new
-    city_array[0]=CityTree.get_code_from_name(from_city) unless from_city.blank?
-    city_array[1]=CityTree.get_code_from_name(to_city) unless to_city.blank?
-    city_array[2]=(city_array[0]||"")+"#"+city_array[1]||""
-    # we need store those unknow city, try recognize them by mannual
-    [city_array[0],city_array[1],city_array[2]]
-    
-   
-  end
-
-  def run_tf56_rule
+  include CaijiHelper
+  def run_tf56_cargo_rule
     @all_raw_cargo=Array.new    
     (7..9).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count.downto(1).each do |i| #each time we parse 3 page
-      page = @mechanize.post(@cargo_rule.mainurl,{:me_page=>i}) #fetch the page,we get internal url by firefox firebug always,firefox may need latest version like version 8
+      page = @mechanize.post("http://www.tf56.com/wshy.asp",{:me_page=>i}) #fetch the page,we get internal url by firefox firebug always,firefox may need latest version like version 8
       #  page.parser().css(@cargo_rule.maincss).each do |cargo_row|  #parser convert page into nokogiri object
       # page.parser().css("td.center_content1 td.hydash").each do |cargo_row|  #parser convert page into nokogiri object
-      page.parser().css("html body table table table table table tr td.hydash:first").each do |cargo_row|  #parser convert page into nokogiri object
-  
+      page.parser().css("html body table table table table table tr td.hydash:first").each do |cargo_row|  #parser convert page into nokogiri object  
         cargo_link=cargo_row.css("a").map { |link| link['href'] }  # this solution stole from internet stackover-flow question
         cargo_link=cargo_link[0]
-        @logger.info "cargo_link=#{cargo_link}"
+     #   @logger.info "cargo_link=#{cargo_link}"
         next if cargo_link.blank? #ignore those unexisited link 
       
         @mechanizeb.get("http://www.tf56.com/"+cargo_link) do |page|  #cargo information are all in page after open this link
@@ -81,7 +52,6 @@ module CargoRulesHelper
             one_cargo[:mobilephone]=one_cargo[:comments].match(/\d\d\d\d\d\d\d\d\d\d\d/).to_s
           end
           @all_raw_cargo<<one_cargo if  one_cargo.length>0   #at least something is there
-
           #  @logger.info  "parsed[2].content =#{parsed[2].content }" 
           #   @logger.info  "parsed[3].content =#{parsed[3].content }" 
           #   @logger.info  "parsed[4].content =#{parsed[4].content }"
@@ -94,12 +64,11 @@ module CargoRulesHelper
     end
     #  @logger.info "all_raw_cargo.size=#{ @all_raw_cargo.size}"
     #post process for those information we get, translate fcity code
-    #save database and post those successful
-    
+    #save database and post those successful    
     save_cargo(@all_raw_cargo)
   end
   
-  def run_56qq_rule
+  def run_56qq_cargo_rule
     @all_raw_cargo=Array.new 
     #cid	-1 fs	30 pid	11
     pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
@@ -109,8 +78,8 @@ module CargoRulesHelper
         #  @logger.info   cookie.value
       end
     end
-    @mechanize.get("http://www.56qq.cn") do |page|  #for generate a history, so setcookie will not raise history empty exception
-    end     
+    @mechanize.get("http://www.56qq.cn")# do |page|  #for generate a history, so setcookie will not raise history empty exception
+  #  end     
     pid_list.each do |pid|
       set_cookie("www.56qq.cn","pid",pid)
       set_cookie("www.56qq.cn","cid",-1)  
@@ -129,7 +98,7 @@ module CargoRulesHelper
                 cargo=Hash.new 
                 cargo[:fcity_code]=onecargo[0][0]
                 cargo[:tcity_code]=onecargo[0][1]
-                cargo[:line]=cargo[:fcity_code]||""+"#"+cargo[:tcity_code]||""
+                cargo[:line]=(cargo[:fcity_code]||"")+"#"+(cargo[:tcity_code]||"")
                 cargo[:fcity_name]=CityTree.get_city_full_path(cargo[:fcity_code])
                 cargo[:tcity_name]=CityTree.get_city_full_path(cargo[:tcity_code])  
                 #   @logger.info "#{cargo[:fcity_name]}-#{cargo[:tcity_name]}"
@@ -223,9 +192,9 @@ module CargoRulesHelper
           tr.css("td").each do |td|
             one_item_array<<td.content     
           end           
-          one_item_array.each_index do |i|
-            @logger.info "index#{i}= #{one_item_array[i]}"
-          end
+        #  one_item_array.each_index do |i|
+          #  @logger.info "index#{i}= #{one_item_array[i]}"
+        #  end
           unless one_item_array[0].blank?
             if one_item_array[0].match("货物")#marked as cargo
               one_cargo[:cate_name]=(one_item_array[1]||"未知货物").strip  
@@ -246,12 +215,12 @@ module CargoRulesHelper
               end              
               one_cargo[:contact] = (one_item_array[10]||"").strip+"-电话"+(one_cargo[:fixphone]||"")+one_cargo[:mobilephone]              
               one_cargo[:timetag] = (one_item_array[12]||"").strip
-           one_cargo[:send_date]=1
-          one_cargo[:from_site]="quzhou"
-          one_cargo[:created_at]=Time.now
-          one_cargo[:status]="正在配车"  # for match local
-          one_cargo[:priority]=600 #not use for now
-          one_cargo[:user_id]="4e24c1d47516fd513c000002" #admin id
+              one_cargo[:send_date]=1
+              one_cargo[:from_site]="quzhou"
+              one_cargo[:created_at]=Time.now
+              one_cargo[:status]="正在配车"  # for match local
+              one_cargo[:priority]=600 #not use for now
+              one_cargo[:user_id]="4e24c1d47516fd513c000002" #admin id
               @all_raw_cargo<<one_cargo if one_cargo.length>0
             end       
           end
@@ -259,56 +228,58 @@ module CargoRulesHelper
         end
       end
     end   
-
-     save_cargo(@all_raw_cargo)
+    save_cargo(@all_raw_cargo)
   end
   
   def run_haoyun_cargo_rule
-        @all_raw_cargo=Array.new 
-    (7..16).include?(Time.now.hour) ? @page_count=1 : @page_count=1  #in busy time ,we need fetch more page     
+    @all_raw_cargo=Array.new 
+    (7..16).include?(Time.now.hour) ? @page_count=5 : @page_count=1  #in busy time ,we need fetch more page     
     @page_count.downto(1).each do |i|
       @mechanize.get("http://peihuo.haoyun56.com/goods_p#{i}.html") do |page|
         page.parser.css("tr.list_list").each do |entry|
           two_row=[entry,entry.next_element]
           two_row.each do |entrycontainer|
-          one_cargo=Hash.new
-          raw_cargo=Array.new
-          entrycontainer.css("td").each do |entrytd|
-            raw_cargo<<entrytd.text.gsub(/\r\n/,"").gsub(/\s/,"")            
-          end
-          raw_cargo.each_index do |index|
-            @logger.info  "index#{index}=#{raw_cargo[index]}"
-          end
-           one_cargo[:cate_name]=(raw_cargo[0]||"未知货物").strip  
-           one_cargo[:fcity_name]=raw_cargo[1].strip   
-           one_cargo[:tcity_name]=raw_cargo[2].strip  
-           one_cargo[:cargo_weight]=raw_cargo[3].strip  
-           one_cargo[:price]=raw_cargo[4].strip 
-           one_cargo[:contact]=raw_cargo[5].strip 
-           one_cargo[:comments]=raw_cargo[6].strip 
-           one_cargo[:timetag]=raw_cargo[7].to_s
+            one_cargo=Hash.new
+            raw_cargo=Array.new
+            entrycontainer.css("td").each do |entrytd|
+              raw_cargo<<entrytd.text.gsub(/\r\n/,"").gsub(/\s/,"")            
+            end
+          #  raw_cargo.each_index do |index|
+          #    @logger.info  "index#{index}=#{raw_cargo[index]}"
+          #  end
+            one_cargo[:cate_name]=(raw_cargo[0]||"未知货物").strip  
+            one_cargo[:fcity_name]=raw_cargo[1].strip   
+            one_cargo[:tcity_name]=raw_cargo[2].strip  
+            one_cargo[:cargo_weight]=raw_cargo[3].strip  
+            one_cargo[:price]=raw_cargo[4].strip 
+            one_cargo[:contact]=raw_cargo[5].strip 
+            one_cargo[:comments]=raw_cargo[6].strip 
+            one_cargo[:timetag]=raw_cargo[7].to_s
             one_cargo[:mobilephone]= one_cargo[:contact].strip.match(/1\d\d\d\d\d\d\d\d\d\d/).to_s
-           one_cargo[:fixphone]= one_cargo[:contact].strip.match(/\d\d\d\d-\d\d\d\d\d\d\d+/).to_s
-          city_array=city_parse(one_cargo[:fcity_name],one_cargo[:tcity_name])
-          one_cargo[:fcity_code]=city_array[0]; one_cargo[:tcity_code]=city_array[1]; one_cargo[:line]=city_array[2]
-          one_cargo[:send_date]=1
-          one_cargo[:from_site]="haoyun56"
-          one_cargo[:created_at]=Time.now
-          one_cargo[:status]="正在配车"  # for match local
-          one_cargo[:priority]=700 #not use for now
-          one_cargo[:user_id]="4e24c1d47516fd513c000002" #admin id
-          @all_raw_cargo<<one_cargo      
+            one_cargo[:fixphone]= one_cargo[:contact].strip.match(/\d\d\d\d-\d\d\d\d\d\d\d+/).to_s
+            city_array=city_parse(one_cargo[:fcity_name],one_cargo[:tcity_name])
+            one_cargo[:fcity_code]=city_array[0]; one_cargo[:tcity_code]=city_array[1]; one_cargo[:line]=city_array[2]
+            one_cargo[:send_date]=1
+            one_cargo[:from_site]="haoyun56"
+            one_cargo[:created_at]=Time.now
+            one_cargo[:status]="正在配车"  # for match local
+            one_cargo[:priority]=700 #not use for now
+            one_cargo[:user_id]="4e24c1d47516fd513c000002" #admin id
+            @all_raw_cargo<<one_cargo      
           end
         end        
       end
     end
-     save_cargo(@all_raw_cargo)
+    save_cargo(@all_raw_cargo)
   end
   
   def save_cargo(all_raw_cargo)
     #  Cargo.delete_all
     all_raw_cargo.each do |cargo|
       begin
+        if cargo.cate_name.size>15
+          cargo.cate_name=cargo.cate_name[0,14]
+        end
         Cargo.new(cargo).save!
       rescue
         @logger.info "excetption on cargo save"
@@ -317,39 +288,38 @@ module CargoRulesHelper
     end
   end 
   
-  def post_cargo_helper
-    
-     @mechanize=Mechanize.new
-      @logger=Logger.new("cargorule.log")
-   @cargos=Array.new
-    if params[:from_site]
-    Cargo.where(:posted=>nil,:from_site=>params[:from_site]).limit(10).each do |cargo|
-      id=cargo.id.to_s
-     hash={}
-     cargo.instance_variables.each {|var| hash[var.to_s.delete("@")] = cargo.instance_variable_get(var) }
-     second_hash= hash["attributes"]
-     second_hash.delete("_id")
-     second_hash.delete("created_at")
-     second_hash.delete("updated_at")
-     second_hash.delete("posted")
-  #  @logger.info second_hash
-    @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)   
-    cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
-     @logger.info "cargo.id=#{cargo.id}"
-    cargo.update_attributes("posted"=>"yes")
-    @logger.info "post done"
-    @cargos<<cargo
-    end
+  def post_cargo_helper(sitename)    
+    @mechanize=Mechanize.new
+    @logger=Logger.new("cargorule.log")
+    @cargos=Array.new
+    if sitename
+      Cargo.where(:posted=>nil,:from_site=>sitename).each do |cargo|
+        id=cargo.id.to_s
+        hash={}
+        cargo.instance_variables.each {|var| hash[var.to_s.delete("@")] = cargo.instance_variable_get(var) }
+        second_hash= hash["attributes"]
+        second_hash.delete("_id")
+        second_hash.delete("created_at")
+        second_hash.delete("updated_at")
+        second_hash.delete("posted")
+        #  @logger.info second_hash
+        @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)   
+        cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
+        #  @logger.info "cargo.id=#{cargo.id}"
+        cargo.update_attributes("posted"=>"yes")
+        # @logger.info "post done"
+        @cargos<<cargo
+      end
     end
   end
   
-  def run_cargorule    
-    prepare_for_rule
-    case @cargo_rule.rulename
+  def run_cargorule(rulename)    
+    prepare_for_rule("cargorule.log")
+    case rulename
     when "tf56cargo"
-      run_tf56_rule
+      run_tf56_cargo_rule
     when "56qqcargo"
-      run_56qq_rule      
+      run_56qq_cargo_rule      
     when "56135cargo"
       run_56135_cargo_rule
     when "quzhoucargo"
@@ -359,6 +329,13 @@ module CargoRulesHelper
     else
     end
   
+  end
+  
+  def cron_run_cargo_rule(sitename,rulename)
+    @cargo_rule=CargoRule.where(:sitename=>sitename,:rulename=>rulename).first  
+    raise if  @cargo_rule.blank?
+    run_cargorule(rulename)
+    post_cargo_helper(sitename)    
   end
 
 end

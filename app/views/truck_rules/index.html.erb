@@ -1,0 +1,57 @@
+<h1>Listing truck_rules</h1>
+
+<table>
+  <tr>
+    <th>Run</th>
+    <th>Edit</th>
+    <th>Trucks</th>
+    <th>Post</th>
+    <th>Sitename</th>
+    <th>Rulename</th>
+    <th>Caiji freq</th>
+    <th>Need post</th>
+    <th>Post freq</th>
+    <th>Fail report</th>
+    <th>Report email</th>
+    <th>Report phone</th>
+    <th>Total caiji</th>
+    <th>Today count</th>
+    <th>Week count</th>
+    <th>Mongth count</th>
+    <th>Year count</th>
+    <th>Repeat count</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @truck_rules.each do |truck_rule| %>
+  <tr>
+    <td><a href="/truck_rules/run_truck_rule/<%=truck_rule.id%>" target="_blank" class="btn default">Run</a></td>
+    <td><a href="" target="_blank" class="btn default">Edit</a></td>
+    <td><a href="/truck_rules/get_all_truck/<%=truck_rule.sitename%>" target="_blank" class="btn default">Trucks</a></td>
+    <td><a href="" target="_blank" class="btn default">Post</a></td>
+    <td><%= truck_rule.sitename %></td>
+    <td><%= truck_rule.rulename %></td>
+    <td><%= truck_rule.caiji_freq %></td>
+    <td><%= truck_rule.need_post %></td>
+    <td><%= truck_rule.post_freq %></td>
+    <td><%= truck_rule.fail_report %></td>
+    <td><%= truck_rule.report_email %></td>
+    <td><%= truck_rule.report_phone %></td>
+    <td><%= truck_rule.total_caiji %></td>
+    <td><%= truck_rule.today_count %></td>
+    <td><%= truck_rule.week_count %></td>
+    <td><%= truck_rule.mongth_count %></td>
+    <td><%= truck_rule.year_count %></td>
+    <td><%= truck_rule.repeat_count %></td>
+    <td><%= link_to 'Show', truck_rule %></td>
+    <td><%= link_to 'Edit', edit_truck_rule_path(truck_rule) %></td>
+    <td><%= link_to 'Destroy', truck_rule, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Truck rule', new_truck_rule_path %>

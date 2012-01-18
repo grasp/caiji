@@ -3,10 +3,10 @@ class CargoRulesController < ApplicationController
   # GET /cargo_rules
   # GET /cargo_rules.json
   include CargoRulesHelper
-  include Qq56Helper
+  include CaijiHelper
   layout 'caiji'
   def index
-      @title="采集零距离"
+    @title="采集零距离"
     @cargo_rules = CargoRule.all
     respond_to do |format|
       format.html # index.html.erb
@@ -45,7 +45,7 @@ class CargoRulesController < ApplicationController
   # POST /cargo_rules.json
   def create
     params[:cargo_rule].each do |key,value|   
-         params[:cargo_rule].delete(key) if value.blank?
+      params[:cargo_rule].delete(key) if value.blank?
       #   puts "delete #{key}"
     end
 
@@ -68,10 +68,10 @@ class CargoRulesController < ApplicationController
     @cargo_rule = CargoRule.find(params[:id])
 
     respond_to do |format|
-     params[:cargo_rule].each do |key,value|   
-         params[:cargo_rule].delete(key) if value.blank?
-       #  puts "delete #{key}"
-    end
+      params[:cargo_rule].each do |key,value|   
+        params[:cargo_rule].delete(key) if value.blank?
+        #  puts "delete #{key}"
+      end
       if @cargo_rule.update_attributes(params[:cargo_rule])
         format.html { redirect_to @cargo_rule, notice: 'Cargo rule was successfully updated.' }
         format.json { head :no_content }
@@ -95,11 +95,9 @@ class CargoRulesController < ApplicationController
   end
   
   def run_cargo_rule
-  
-    puts "params[:id]=#{params[:id]}"
     @cargo_rule=CargoRule.find(params[:id])
-      @title="#{@cargo_rule.rulename}运行结果"
-    run_cargorule
+    @title="#{@cargo_rule.rulename}运行结果"
+    run_cargorule(@cargo_rule.rulename)
     respond_to do |format|
       format.html 
       format.json { head :no_content }
@@ -107,12 +105,12 @@ class CargoRulesController < ApplicationController
   end
   
   def get_all_cargo
-     @title="#{params[:from_site]}全部采集结果"
+    @title="#{params[:from_site]}全部采集结果"
     @cargos=Cargo.where(:from_site=>params[:from_site]).desc(:created_at).paginate(:page=>params[:page]||1,:per_page=>100) 
     @count=Cargo.where(:from_site=>params[:from_site]).count
   end
   
   def post_cargo
-    post_cargo_helper
+    post_cargo_helper(params[:from_site])
   end
 end

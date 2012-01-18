@@ -1,4 +1,9 @@
 Caiji::Application.routes.draw do
+      match '/truck_rules/run_truck_rule/:id' => 'truck_rules#run_truck_rule'
+     match '/truck_rules/get_all_truck/:from_site' => 'truck_rules#get_all_truck'
+     match '/truck_rules/post_truck(/:from_site)' => 'truck_rules#post_truck'
+  resources :truck_rules
+
     match '/cargo_rules/run_cargo_rule/:id' => 'cargo_rules#run_cargo_rule'
     match '/cargo_rules/get_all_cargo/:from_site' => 'cargo_rules#get_all_cargo'
      match '/cargo_rules/post_cargo(/:from_site)' => 'cargo_rules#post_cargo'

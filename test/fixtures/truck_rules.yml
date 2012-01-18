@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  sitename: MyString
+  rulename: MyString
+  caiji_freq: 1
+  need_post: false
+  post_freq: 1
+  fail_report: false
+  report_email: MyString
+  report_phone: MyString
+  total_caiji: 1
+  today_count: 1
+  week_count: 1
+  mongth_count: 1
+  year_count: 1
+  repeat_count: 1
+
+two:
+  sitename: MyString
+  rulename: MyString
+  caiji_freq: 1
+  need_post: false
+  post_freq: 1
+  fail_report: false
+  report_email: MyString
+  report_phone: MyString
+  total_caiji: 1
+  today_count: 1
+  week_count: 1
+  mongth_count: 1
+  year_count: 1
+  repeat_count: 1
