@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Sitename:</b>
+  <%= @contact_rule.sitename %>
+</p>
+
+<p>
+  <b>Rulename:</b>
+  <%= @contact_rule.rulename %>
+</p>
+
+<p>
+  <b>Caiji freq:</b>
+  <%= @contact_rule.caiji_freq %>
+</p>
+
+<p>
+  <b>Need post:</b>
+  <%= @contact_rule.need_post %>
+</p>
+
+<p>
+  <b>Post freq:</b>
+  <%= @contact_rule.post_freq %>
+</p>
+
+<p>
+  <b>Fail report:</b>
+  <%= @contact_rule.fail_report %>
+</p>
+
+<p>
+  <b>Report email:</b>
+  <%= @contact_rule.report_email %>
+</p>
+
+<p>
+  <b>Report phone:</b>
+  <%= @contact_rule.report_phone %>
+</p>
+
+<p>
+  <b>Total caiji:</b>
+  <%= @contact_rule.total_caiji %>
+</p>
+
+<p>
+  <b>Today count:</b>
+  <%= @contact_rule.today_count %>
+</p>
+
+<p>
+  <b>Week count:</b>
+  <%= @contact_rule.week_count %>
+</p>
+
+<p>
+  <b>Mongth count:</b>
+  <%= @contact_rule.mongth_count %>
+</p>
+
+<p>
+  <b>Year count:</b>
+  <%= @contact_rule.year_count %>
+</p>
+
+<p>
+  <b>Repeat count:</b>
+  <%= @contact_rule.repeat_count %>
+</p>
+
+
+<%= link_to 'Edit', edit_contact_rule_path(@contact_rule) %> |
+<%= link_to 'Back', contact_rules_path %>

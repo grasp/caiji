@@ -15,6 +15,7 @@
     <th>Report email</th>
     <th>Report phone</th>
     <th>Total caiji</th>
+     <th>Total post</th>
     <th>Today count</th>
     <th>Week count</th>
     <th>Mongth count</th>
@@ -30,7 +31,7 @@
     <td><a href="/truck_rules/run_truck_rule/<%=truck_rule.id%>" target="_blank" class="btn default">Run</a></td>
     <td><a href="" target="_blank" class="btn default">Edit</a></td>
     <td><a href="/truck_rules/get_all_truck/<%=truck_rule.sitename%>" target="_blank" class="btn default">Trucks</a></td>
-    <td><a href="" target="_blank" class="btn default">Post</a></td>
+    <td><a href="/truck_rules/post_truck/<%=truck_rule.sitename%>" target="_blank" class="btn default">Post</a></td>
     <td><%= truck_rule.sitename %></td>
     <td><%= truck_rule.rulename %></td>
     <td><%= truck_rule.caiji_freq %></td>
@@ -39,11 +40,20 @@
     <td><%= truck_rule.fail_report %></td>
     <td><%= truck_rule.report_email %></td>
     <td><%= truck_rule.report_phone %></td>
+    
+     <td><%=Truck.where(:from_site=>truck_rule.sitename).count%>
+    <td><%=Truck.where(:from_site=>truck_rule.sitename,:posted=>"yes").count%>
+     <td><%=Truck.where(:from_site=>truck_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_day).count%>
+     <td><%=Truck.where(:from_site=>truck_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_week).count%>
+  <td><%=Truck.where(:from_site=>truck_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_month).count%>
+ <td><%=Truck.where(:from_site=>truck_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_year).count%>
+   
     <td><%= truck_rule.total_caiji %></td>
     <td><%= truck_rule.today_count %></td>
     <td><%= truck_rule.week_count %></td>
     <td><%= truck_rule.mongth_count %></td>
     <td><%= truck_rule.year_count %></td>
+    
     <td><%= truck_rule.repeat_count %></td>
     <td><%= link_to 'Show', truck_rule %></td>
     <td><%= link_to 'Edit', edit_truck_rule_path(truck_rule) %></td>

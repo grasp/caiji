@@ -1,0 +1,53 @@
+<h1>Listing contact_rules</h1>
+
+<table>
+  <tr>
+    <th>Run</th>
+    <th>Contacts</th>
+    <th>Sitename</th>
+    <th>Rulename</th>
+    <th>Caiji freq</th>
+    <th>Need post</th>
+    <th>Post freq</th>
+    <th>Fail report</th>
+    <th>Report email</th>
+    <th>Report phone</th>
+    <th>Total caiji</th>
+    <th>Today count</th>
+    <th>Week count</th>
+    <th>Mongth count</th>
+    <th>Year count</th>
+    <th>Repeat count</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @contact_rules.each do |contact_rule| %>
+  <tr>
+    <td><a  class="btn default" href="/contact_rules/run_contact_rule/<%=contact_rule.id%>">Run</a></td>
+    <td><a  class="btn default" href="/contact_rules/get_all_contact/<%=contact_rule.rulename%>">Contacts</a></td>
+    <td><%= contact_rule.sitename %></td>
+    <td><%= contact_rule.rulename %></td>
+    <td><%= contact_rule.caiji_freq %></td>
+    <td><%= contact_rule.need_post %></td>
+    <td><%= contact_rule.post_freq %></td>
+    <td><%= contact_rule.fail_report %></td>
+    <td><%= contact_rule.report_email %></td>
+    <td><%= contact_rule.report_phone %></td>
+    <td><%= contact_rule.total_caiji %></td>
+    <td><%= contact_rule.today_count %></td>
+    <td><%= contact_rule.week_count %></td>
+    <td><%= contact_rule.mongth_count %></td>
+    <td><%= contact_rule.year_count %></td>
+    <td><%= contact_rule.repeat_count %></td>
+    <td><%= link_to 'Show', contact_rule %></td>
+    <td><%= link_to 'Edit', edit_contact_rule_path(contact_rule) %></td>
+    <td><%= link_to 'Destroy', contact_rule, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Contact rule', new_contact_rule_path %>

@@ -1,5 +1,28 @@
-<h1>New truck_rule</h1>
+<h1>Post trucks of caiji</h1>
+<table>
+  <th>牌照</th>
+   <th>吨位</th>
+    <th>车长</th>
+         <th>出发</th>
+       <th>到达</th>
+     <th>线路</th>
+     <th>联系</th>
+     <th>备注</th>
+  <th>posted</th>
+     
+  <%@trucks.each do |truck|%>
+  <tr>
+    <td><%=truck.paizhao%></td>
+    <td><%=truck.dunwei%></td>
+    <td><%=truck.length%></td>
+    <td><%=truck.fcity_name%>-<%=truck.fcity_code%></td>
+    <td><%=truck.tcity_name%>-<%=truck.tcity_code%></td>
+    <td><%=truck.line%>
+    <td><%=truck.contact%></td>
+    <td><%=truck.comments%></td>    
+     <td><%=truck.posted%></td>    
+  </tr>
+  <%end%>
+  
+</table>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', truck_rules_path %>

@@ -89,13 +89,11 @@ class TruckRulesController < ApplicationController
     run_truckrule( @truck_rule.sitename,@truck_rule.rulename)
   end
   
-  def get_all_truck
-    
-    @trucks=Truck.where(:from_site=>params[:from_site]).desc(:created_at).paginate(:page=>params[:page]||1,:per_page=>100) 
-    
+  def get_all_truck    
+    @trucks=Truck.where(:from_site=>params[:from_site]).desc(:created_at).paginate(:page=>params[:page]||1,:per_page=>100)     
   end
   
   def post_truck
-    
+    post_truck_helper(params[:from_site])
   end
 end

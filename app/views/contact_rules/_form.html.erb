@@ -1,0 +1,73 @@
+<%= form_for(@contact_rule) do |f| %>
+  <% if @contact_rule.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contact_rule.errors.count, "error") %> prohibited this contact_rule from being saved:</h2>
+
+      <ul>
+      <% @contact_rule.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :sitename %><br />
+    <%= f.text_field :sitename %>
+  </div>
+  <div class="field">
+    <%= f.label :rulename %><br />
+    <%= f.text_field :rulename %>
+  </div>
+  <div class="field">
+    <%= f.label :caiji_freq %><br />
+    <%= f.number_field :caiji_freq %>
+  </div>
+  <div class="field">
+    <%= f.label :need_post %><br />
+    <%= f.check_box :need_post %>
+  </div>
+  <div class="field">
+    <%= f.label :post_freq %><br />
+    <%= f.number_field :post_freq %>
+  </div>
+  <div class="field">
+    <%= f.label :fail_report %><br />
+    <%= f.check_box :fail_report %>
+  </div>
+  <div class="field">
+    <%= f.label :report_email %><br />
+    <%= f.text_field :report_email %>
+  </div>
+  <div class="field">
+    <%= f.label :report_phone %><br />
+    <%= f.text_field :report_phone %>
+  </div>
+  <div class="field">
+    <%= f.label :total_caiji %><br />
+    <%= f.number_field :total_caiji %>
+  </div>
+  <div class="field">
+    <%= f.label :today_count %><br />
+    <%= f.number_field :today_count %>
+  </div>
+  <div class="field">
+    <%= f.label :week_count %><br />
+    <%= f.number_field :week_count %>
+  </div>
+  <div class="field">
+    <%= f.label :mongth_count %><br />
+    <%= f.number_field :mongth_count %>
+  </div>
+  <div class="field">
+    <%= f.label :year_count %><br />
+    <%= f.number_field :year_count %>
+  </div>
+  <div class="field">
+    <%= f.label :repeat_count %><br />
+    <%= f.number_field :repeat_count %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

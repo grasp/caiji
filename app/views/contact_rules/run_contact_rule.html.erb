@@ -1,0 +1,12 @@
+<h1>Run Truck rule result</h1>
+
+<table>
+  <th>mphone</th>
+
+<%@all_raw_contact.each do |contact|%>
+  <tr>
+   <td><%=contact[:mphone]%></td>
+  </tr>
+<%end%>
+  
+  </table>

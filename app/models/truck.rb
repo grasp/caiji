@@ -73,12 +73,9 @@ class Truck
        
       
     def check_unique
-  
-    repeated=Truck.where(:paizhao=>self.paizhao,:line=>self.line,:user_id=>self.user_id,:status=>"正在配货",
-            :comments=>self.comments,:contact=>self.contact,:from_site=>self.from_site)
-
-   # puts "repeated.size=#{repeated.size}"
-    unless repeated.size==0
+        repeated=Truck.where(:paizhao=>self.paizhao,:line=>self.line,:comments=>self.comments,:contact=>self.contact,:user_id=>self.user_id,:status=>"正在配货",:from_site=>self.from_site).count
+    # puts "repreated=#{repeated}"
+    unless repeated==0
        errors.add(:base,"不能重复发布车源信息")
       return false
     end

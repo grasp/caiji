@@ -35,11 +35,12 @@ require File.join(project_root,"app","helpers","cities_helper.rb")
 require File.join(project_root,"app","helpers","caiji_helper.rb")
 require File.join(project_root,"app","helpers","cargos_helper.rb")
 require File.join(project_root,"app","models","cargo.rb")
+require File.join(project_root,"app","models","truck.rb")
 require File.join(project_root,"app","models","cargo_rule.rb")
-
+require File.join(project_root,"app","models","truck_rule.rb")
 
 require File.join(project_root,"app","helpers","cargo_rules_helper.rb")
-
+require File.join(project_root,"app","helpers","truck_rules_helper.rb")
 
 
 

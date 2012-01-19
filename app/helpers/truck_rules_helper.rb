@@ -25,7 +25,9 @@ module TruckRulesHelper
               #  end                
                 one_truck[:paizhao]=parsed[2] if (parsed[1]||"").match("车牌号码")
                 one_truck[:dunwei]=parsed[2] if (parsed[1]||"").match("吨位")
+                one_truck[:dunwei]=one_truck[:dunwei].gsub("吨","") if (one_truck[:dunwei]||"").match("吨")
                 one_truck[:length]=parsed[2] if (parsed[1]||"").match("车长")
+                 one_truck[:length]=one_truck[:length].gsub("米","") if (one_truck[:length]||"").match("米")
                 one_truck[:fcity_name]=parsed[2] if (parsed[1]||"").match("出发地")
                 one_truck[:tcity_name]=parsed[2] if (parsed[1]||"").match("到达地")                                
                 one_truck[:contact]="" if  one_truck[:contact].nil?
@@ -90,7 +92,7 @@ module TruckRulesHelper
    
           parse_56qq_line(raw_array[0]).each do |line|
             if raw_array[1].match("车源信息")
-               @logger.info "raw_array0=#{raw_array[0]},raw_array1=#{raw_array[1]},raw_array0=#{raw_array[2]}"
+              # @logger.info "raw_array0=#{raw_array[0]},raw_array1=#{raw_array[1]},raw_array0=#{raw_array[2]}"
               onetruck=[line,raw_array[1], raw_array[2]]
               if !onetruck[0][0].nil? and !onetruck[0][1].nil?
                 one_truck=Hash.new 
@@ -105,14 +107,14 @@ module TruckRulesHelper
                  one_truck[:dunwei]=onetruck[1].match(/...吨/).to_s
                 one_truck[:paizhao]=one_truck[:comments].match(/车牌号为.......车/) unless one_truck[:comments].blank?
                 one_truck[:contact]=onetruck[2].gsub(/TEL\:/,"") 
-                 one_truck[:paizhao]=one_truck[:paizhao]||"未知牌照"
+                 one_truck[:paizhao]="未知牌照" if one_truck[:paizhao].blank?
                 #fetch mobilephone and fixphone
                 one_truck[:mobilephone]=one_truck[:contact].match(/1\d\d\d\d\d\d\d\d\d\d/).to_s
                 one_truck[:fixphone]=one_truck[:contact].match(/\d\d\d+-\d\d\d\d\d\d\d+/).to_s  
                 one_truck[:send_date]=1
                 one_truck[:from_site]="56qq"
                 one_truck[:created_at]=Time.now
-                one_truck[:status]="正在配车"  # for match local
+                one_truck[:status]="正在配货"  # for match local
                 one_truck[:priority]=300
                 one_truck[:timetag]=timetag # which time it is generated
                 a=Time.now
@@ -131,7 +133,7 @@ module TruckRulesHelper
         end
       end
     end   
-    
+      save_truck(@all_raw_truck)
   end
   
   def run_56135_truck_rule
@@ -147,7 +149,7 @@ module TruckRulesHelper
   end
   
     def save_truck(all_raw_truck)
-      Truck.delete_all
+     # Truck.delete_all
     all_raw_truck.each do |truck|
       begin
         Truck.new(truck).save!
@@ -157,7 +159,33 @@ module TruckRulesHelper
       end
     end
   end 
-  
+    def post_truck_helper(sitename)    
+    @mechanize=Mechanize.new
+    @logger=Logger.new("truckrule.log")
+    @trucks=Array.new
+#Truck.all.each do |truck|
+ #   truck.update_attributes("posted"=>nil) #need set to yes after post
+#end
+    if sitename
+      Truck.where(:posted=>nil,:from_site=>sitename).each do |truck|   
+        id=truck.id.to_s
+        hash={}
+        truck.instance_variables.each {|var| hash[var.to_s.delete("@")] = truck.instance_variable_get(var) }
+        second_hash= hash["attributes"]
+        second_hash.delete("_id")
+        second_hash.delete("created_at")
+        second_hash.delete("updated_at")
+        second_hash.delete("posted")
+        #  @logger.info second_hash
+        @mechanize.post("http://127.0.0.1:4500/trucks/post_truck/#{sitename}",{:truck=>second_hash})   
+        truck.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
+        #  @logger.info "cargo.id=#{cargo.id}"
+        truck.update_attributes("posted"=>"yes") #need set to yes after post
+        # @logger.info "post done"
+        @trucks<<truck
+      end
+    end
+  end
   def run_truckrule(sitename,rulename)
     prepare_for_rule("truckrule.log")
     case rulename
@@ -174,6 +202,11 @@ module TruckRulesHelper
     else
     end
   end
-  
+  def cron_run_truck_rule(sitename,rulename)
+    @truck_rule=TruckRule.where(:sitename=>sitename,:rulename=>rulename).first  
+    raise if  @truck_rule.blank?
+    run_truckrule(sitename,rulename)
+    post_truck_helper(sitename)    
+  end
   
 end
