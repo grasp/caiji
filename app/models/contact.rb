@@ -32,6 +32,15 @@ class  Contact
   index :QQ
   index :email
 
+  before_create :check_unique
+  
+  def check_unique
+   repeated=Contact.where(:mphone=>self.mphone,:QQ=>self.QQ,:email=>self.email,:fixphone=>self.fixphone).count 
+  if  repeated > 0
+      return false
+  end
+      return true
+  end
   end
   
      

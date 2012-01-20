@@ -35,11 +35,13 @@
     <td><%= contact_rule.fail_report %></td>
     <td><%= contact_rule.report_email %></td>
     <td><%= contact_rule.report_phone %></td>
-    <td><%= contact_rule.total_caiji %></td>
-    <td><%= contact_rule.today_count %></td>
-    <td><%= contact_rule.week_count %></td>
-    <td><%= contact_rule.mongth_count %></td>
-    <td><%= contact_rule.year_count %></td>
+
+
+    <td><%=Contact.where(:from_site=>contact_rule.sitename).count%>
+     <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_day).count%>
+     <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_week).count%>
+  <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_month).count%>
+ <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_year).count%>
     <td><%= contact_rule.repeat_count %></td>
     <td><%= link_to 'Show', contact_rule %></td>
     <td><%= link_to 'Edit', edit_contact_rule_path(contact_rule) %></td>

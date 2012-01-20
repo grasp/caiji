@@ -1,5 +1,5 @@
-source 'https://rubygems.org'
-
+# 'https://rubygems.org'
+source 'https://ruby.taobao.org'
 gem 'rails', '3.2.0.rc2'
 
 # Bundle edge Rails instead:
@@ -34,5 +34,6 @@ gem 'jquery-rails'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 gem "will_paginate", "~> 3.0.pre2"
 gem 'mongoid'
-gem 'mechanize'
+gem 'mechanize' #, "2.0.1"
 gem 'sqlite3'
+gem 'nokogiri' #, "1.4.4.1"
