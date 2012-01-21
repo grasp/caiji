@@ -186,7 +186,7 @@ module CargoRulesHelper
     @page_count.downto(1) do |i|
       @mechanize.get("http://56.qz56.com:8081/wl/UserQueryData.jsp?offset=#{i}&likestr=") do |page|      
         page.parser().css("html body div table tbody tr td table tr").each do |tr|
-          @logger.info "start a new cargo"
+        #  @logger.info "start a new cargo"
           one_cargo=Hash.new
           one_item_array=Array.new
           tr.css("td").each do |td|
