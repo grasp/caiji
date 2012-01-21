@@ -1,4 +1,5 @@
 #coding:utf-8
+require 'socket'
 
 module CaijiHelper
   include CitiesHelper
@@ -6,7 +7,12 @@ module CaijiHelper
     @logger=Logger.new(logname)
     @mechanize=Mechanize.new
     @mechanizeb=Mechanize.new
-    @office=true
+    
+    Object::RUBY_PLATFORM.match("linux") ? (@office=false; @production=true)  :@office=true #linux did not need proxy
+   
+    @office=false if Socket.gethostname=="4f200ee3a49f435"
+    puts "office mode=#{@office}"
+    
     @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
     @mechanizeb.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
     @mechanize.cookie_jar.load_cookiestxt(StringIO.new($cookie))  

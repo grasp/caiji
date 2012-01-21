@@ -9,13 +9,13 @@ gem 'mongoid', '=2.2.2' #support monoid 1.8.2,mondoid 2.4.0 did not support mong
 require 'mongoid'
 #coding:utf-8
 require "sqlite3"
+require 'socket'
 
+#linux is deploy env, and windows is dev env
+Object::RUBY_PLATFORM.match("linux") ? $debug=false : $debug=true
+$debug=true if Socket.gethostname=="4f200ee3a49f435"
+puts "debug mode=#{$debug}"
 #connect to database
-
-ARGF.argv[0]=="development" ? $debug=true : $debug=false
-
-$debug=true
-
 $mongo=Mongo::Connection.new('localhost', 27017)
 $debug ? $db = $mongo.db('caiji_development') : $db = $mongo.db('caiji_production')
 Mongoid.database = $db

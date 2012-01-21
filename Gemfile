@@ -1,10 +1,9 @@
-<<<<<<< HEAD
-# 'https://rubygems.org'
-source 'https://ruby.taobao.org'
-=======
+
+#source 'https://ruby.taobao.org'
+
 #source 'https://rubygems.org'
 source 'http://ruby.taobao.org'
->>>>>>> 6772d4529c892d561c5cfbdbf7ce315c9fadd9a9
+
 gem 'rails', '3.2.0.rc2'
 
 # Bundle edge Rails instead:

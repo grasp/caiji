@@ -303,7 +303,13 @@ module CargoRulesHelper
         second_hash.delete("updated_at")
         second_hash.delete("posted")
         #  @logger.info second_hash
-        @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)   
+        if @production
+          @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  
+        else
+          @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  
+        end
+        
+        
         cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
         #  @logger.info "cargo.id=#{cargo.id}"
         cargo.update_attributes("posted"=>"yes")

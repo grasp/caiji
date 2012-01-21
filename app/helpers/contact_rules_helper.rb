@@ -52,7 +52,8 @@ module ContactRulesHelper
             rescue
               #just continue
             end
-             @logger.info one_contact
+             one_contact[:from_site]="56135"  
+          #   @logger.info one_contact
              @all_raw_contact<< one_contact
         end
       end
@@ -148,7 +149,7 @@ module ContactRulesHelper
                 one_contact[:create_time]=other_info[7].content
                 one_contact[:companyurl]=other_info[9].content   
               
-                one_contact[:from_site]="tuge"  
+                one_contact[:from_site]="56885"  
               
                 # @logger.info one_contact
                 @all_raw_contact<< one_contact
@@ -158,13 +159,12 @@ module ContactRulesHelper
         end
       end
     end
-    #  save_contact
+      save_contact
   end
 
 
   def save_contact
-    Contact.delete_all
-    @all_raw_contact.each do |contact|
+     @all_raw_contact.each do |contact|
       begin
         Contact.new(contact).save!
       rescue
