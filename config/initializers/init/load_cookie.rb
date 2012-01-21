@@ -10,8 +10,9 @@ cookie_dir ="C:\\Documents and Settings\\Administrator\\Application Data\\Mozill
  else
    cookie_dir ="D:\\Profiles\\w22812\\Application Data\\Mozilla\\Firefox\\Profiles\\623tc49u.default"  
  end
-cookie_dir ="/home/hunter/.mozilla/firefox/h9tayj2y.default" if  Object::RUBY_PLATFORM.match("linux")
- cookie = String.new  
+#cookie_dir ="/home/hunter/.mozilla/firefox/h9tayj2y.default" if  Object::RUBY_PLATFORM.match("linux")
+cookie_dir="/home/hunter/h9tayj2y"  if  Object::RUBY_PLATFORM.match("linux") 
+cookie = String.new  
   Dir.chdir(cookie_dir){|dir|  
     db = SQLite3::Database.new('cookies.sqlite')  
     p = Proc.new{|s| s.to_i.zero? ? 'TRUE' : 'FALSE'}  
