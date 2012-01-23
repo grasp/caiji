@@ -1,5 +1,5 @@
 #coding:utf-8
-
+require 'rubygems'
 
 require 'pathname'
 require 'forever'
@@ -12,7 +12,7 @@ class CronCargo
   include CargoRulesHelper
   include CargosHelper
   include CitiesHelper
-  include Qq56Helper
+#  include Qq56Helper
   
   def cargo_cron(sitename,rulename)
     cron_run_cargo_rule(sitename,rulename)

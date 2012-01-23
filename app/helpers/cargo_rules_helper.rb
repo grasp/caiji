@@ -2,6 +2,7 @@
 module CargoRulesHelper
   include CaijiHelper
   def run_tf56_cargo_rule
+  #  @logger.info "run tf56cargo"
     @all_raw_cargo=Array.new    
     (7..9).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count.downto(1).each do |i| #each time we parse 3 page
@@ -276,20 +277,22 @@ module CargoRulesHelper
   def save_cargo(all_raw_cargo)
     #  Cargo.delete_all
     all_raw_cargo.each do |cargo|
+
       begin
-        if cargo.cate_name.size>15
-          cargo.cate_name=cargo.cate_name[0,14]
+        if cargo[:cate_name].size >15
+          cargo[:cate_name]=cargo[:cate_name][0,14]
         end
         Cargo.new(cargo).save!
       rescue
         @logger.info "excetption on cargo save"
-        #  @logger.info $@
+          @logger.info $@
       end
     end
   end 
   
   def post_cargo_helper(sitename)    
     @mechanize=Mechanize.new
+    Object::RUBY_PLATFORM.match("linux") ? (@office=false; @production=true)  :@office=true #linux did not need proxy
     @logger=Logger.new("cargorule.log")
     @cargos=Array.new
     if sitename

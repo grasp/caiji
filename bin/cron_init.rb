@@ -18,6 +18,7 @@ puts "debug mode=#{$debug}"
 #connect to database
 $mongo=Mongo::Connection.new('localhost', 27017)
 $debug ? $db = $mongo.db('caiji_development') : $db = $mongo.db('caiji_production')
+$db = $mongo.db('caiji_development') 
 Mongoid.database = $db
 
 pn = Pathname.new(File.dirname(__FILE__))

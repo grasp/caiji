@@ -78,6 +78,7 @@ class  Cargo
      :contact=>self.contact,:from_site=>self.from_site ).count 
   if  repeated > 0
     if Time.now-repeated.created_at<900
+      puts "repeated=#{repeated}"
         errors.add(:base,"不能重复发布货源信息,请至少间隔15分钟后再重复发布")
       return false
     end 
