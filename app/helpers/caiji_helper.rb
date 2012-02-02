@@ -12,7 +12,7 @@ module CaijiHelper
    
     @office=false if Socket.gethostname=="4f200ee3a49f435"
     puts "office mode=#{@office}"
-    
+   @office=true 
     @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
     @mechanizeb.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
     @mechanize.cookie_jar.load_cookiestxt(StringIO.new($cookie))  

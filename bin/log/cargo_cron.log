@@ -1,35 +1,66 @@
-[23/01 12:18:27] office mode=false
-[23/01 12:18:27] office mode=false
-[23/01 12:18:29] office mode=false
-[23/01 12:18:31] office mode=false
-[23/01 12:18:38] office mode=false
+[02/02 18:39:00] office mode=false
+[02/02 18:39:00] office mode=false
+[02/02 18:39:02] ["/opt/vob/hunter/caiji/app/helpers/cargo_rules_helper.rb:346:in `cron_run_cargo_rule'", "cargo_cron.rb:18:in `cargo_cron'", "cargo_cron.rb:46:in `block (2 levels) in <main>'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/job.rb:12:in `call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/job.rb:12:in `call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/base.rb:354:in `safe_call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/base.rb:346:in `job_call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/base.rb:106:in `block (3 levels) in initialize'"]
+[02/02 18:39:17] office mode=false
+[02/02 18:39:25] office mode=false
+[02/02 18:39:25] office mode=false
+[02/02 18:39:27] ["/opt/vob/hunter/caiji/app/helpers/cargo_rules_helper.rb:346:in `cron_run_cargo_rule'", "cargo_cron.rb:18:in `cargo_cron'", "cargo_cron.rb:46:in `block (2 levels) in <main>'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/job.rb:12:in `call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/job.rb:12:in `call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/base.rb:354:in `safe_call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/base.rb:346:in `job_call'", "/usr/local/lib/ruby/gems/1.9.1/gems/foreverb-0.3.0.f/lib/forever/base.rb:106:in `block (3 levels) in initialize'"]
+[02/02 18:39:38] office mode=false
+[02/02 18:40:36] office mode=false
 开启 Spider 模式。检查是否存在远程文件。
---2012-01-23 12:18:39--  http://w090.com/admin/dev_expire
-正在解析主机 w090.com... ::1, 202.91.246.197
-正在连接 w090.com|::1|:80... 失败：拒绝连接。
-正在连接 w090.com|202.91.246.197|:80... 已连接。
-已发出 HTTP 请求，正在等待回应... 200 OK
+--2012-02-02 18:40:40--  http://w090.com/admin/dev_expire
+正在解析主机 wwwgate0-ch.mot.com... 140.101.245.16
+正在连接 wwwgate0-ch.mot.com|140.101.245.16|:1080... 已连接。
+已发出 Proxy 请求，正在等待回应... 200 OK
 长度： 未指定 [text/html]
 存在远程文件且该文件可能含有更深层的链接，
 但不能进行递归操作 -- 无法取回。
 
 开启 Spider 模式。检查是否存在远程文件。
---2012-01-23 12:18:41--  http://w090.com/cargos/allcity
-正在解析主机 w090.com... ::1, 202.91.246.197
-正在连接 w090.com|::1|:80... 失败：拒绝连接。
-正在连接 w090.com|202.91.246.197|:80... 已连接。
-已发出 HTTP 请求，正在等待回应... 200 OK
+--2012-02-02 18:40:41--  http://w090.com/cargos/allcity
+正在解析主机 wwwgate0-ch.mot.com... 140.101.245.16
+正在连接 wwwgate0-ch.mot.com|140.101.245.16|:1080... 已连接。
+已发出 Proxy 请求，正在等待回应... 200 OK
 长度： 未指定 [text/html]
 存在远程文件且该文件可能含有更深层的链接，
 但不能进行递归操作 -- 无法取回。
 
 开启 Spider 模式。检查是否存在远程文件。
---2012-01-23 12:18:41--  http://w090.com/trucks/allcity
-正在解析主机 w090.com... ::1, 202.91.246.197
-正在连接 w090.com|::1|:80... 失败：拒绝连接。
-正在连接 w090.com|202.91.246.197|:80... 已连接。
-已发出 HTTP 请求，正在等待回应... 200 OK
+--2012-02-02 18:40:42--  http://w090.com/trucks/allcity
+正在解析主机 wwwgate0-ch.mot.com... 140.101.245.16
+正在连接 wwwgate0-ch.mot.com|140.101.245.16|:1080... 已连接。
+已发出 Proxy 请求，正在等待回应... 200 OK
 长度： 未指定 [text/html]
 存在远程文件且该文件可能含有更深层的链接，
 但不能进行递归操作 -- 无法取回。
 
+[02/02 18:40:47] office mode=false
+开启 Spider 模式。检查是否存在远程文件。
+--2012-02-02 18:40:48--  http://w090.com/admin/dev_expire
+正在解析主机 wwwgate0-ch.mot.com... 140.101.245.16
+正在连接 wwwgate0-ch.mot.com|140.101.245.16|:1080... 已连接。
+已发出 Proxy 请求，正在等待回应... 200 OK
+长度： 未指定 [text/html]
+存在远程文件且该文件可能含有更深层的链接，
+但不能进行递归操作 -- 无法取回。
+
+开启 Spider 模式。检查是否存在远程文件。
+--2012-02-02 18:40:49--  http://w090.com/cargos/allcity
+正在解析主机 wwwgate0-ch.mot.com... 140.101.245.16
+正在连接 wwwgate0-ch.mot.com|140.101.245.16|:1080... 已连接。
+已发出 Proxy 请求，正在等待回应... 200 OK
+长度： 未指定 [text/html]
+存在远程文件且该文件可能含有更深层的链接，
+但不能进行递归操作 -- 无法取回。
+
+开启 Spider 模式。检查是否存在远程文件。
+--2012-02-02 18:40:50--  http://w090.com/trucks/allcity
+正在解析主机 wwwgate0-ch.mot.com... 140.101.245.16
+正在连接 wwwgate0-ch.mot.com|140.101.245.16|:1080... 已连接。
+已发出 Proxy 请求，正在等待回应... 200 OK
+长度： 未指定 [text/html]
+存在远程文件且该文件可能含有更深层的链接，
+但不能进行递归操作 -- 无法取回。
+
+[02/02 18:45:51] office mode=false
+[02/02 18:46:03] office mode=false

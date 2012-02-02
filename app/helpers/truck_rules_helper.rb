@@ -163,6 +163,7 @@ module TruckRulesHelper
     @mechanize=Mechanize.new
     @logger=Logger.new("truckrule.log")
     @trucks=Array.new
+@mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)
 #Truck.all.each do |truck|
  #   truck.update_attributes("posted"=>nil) #need set to yes after post
 #end
@@ -177,11 +178,11 @@ module TruckRulesHelper
         second_hash.delete("updated_at")
         second_hash.delete("posted")
         #  @logger.info second_hash
-        if @production
+        #if @production
             @mechanize.post("http://w090.com/trucks/post_truck/#{sitename}",{:truck=>second_hash}) 
-        else
-            @mechanize.post("http://127.0.0.1:4500/trucks/post_truck/#{sitename}",{:truck=>second_hash}) 
-        end      
+        #else
+         #   @mechanize.post("http://127.0.0.1:4500/trucks/post_truck/#{sitename}",{:truck=>second_hash}) 
+        #end      
   
         truck.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
         #  @logger.info "cargo.id=#{cargo.id}"

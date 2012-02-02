@@ -5,7 +5,7 @@ gem 'mechanize', '=2.0.1' #there have a exception stop us in version 2.1 ,have t
 require 'mechanize'
 require 'mongo'
 require 'logger'
-gem 'mongoid', '=2.2.2' #support monoid 1.8.2,mondoid 2.4.0 did not support mongodb 1.8.2
+#gem 'mongoid', '=2.2.2' #support monoid 1.8.2,mondoid 2.4.0 did not support mongodb 1.8.2
 require 'mongoid'
 #coding:utf-8
 require "sqlite3"

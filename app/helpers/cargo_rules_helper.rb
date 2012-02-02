@@ -4,7 +4,7 @@ module CargoRulesHelper
   def run_tf56_cargo_rule
   #  @logger.info "run tf56cargo"
     @all_raw_cargo=Array.new    
-    (7..9).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page  
+    (7..16).include?(Time.now.hour) ? @page_count=13 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count.downto(1).each do |i| #each time we parse 3 page
       page = @mechanize.post("http://www.tf56.com/wshy.asp",{:me_page=>i}) #fetch the page,we get internal url by firefox firebug always,firefox may need latest version like version 8
       #  page.parser().css(@cargo_rule.maincss).each do |cargo_row|  #parser convert page into nokogiri object
@@ -138,7 +138,7 @@ module CargoRulesHelper
   
   def run_56135_cargo_rule
     @all_raw_cargo=Array.new 
-    (7..16).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page  
+    (7..16).include?(Time.now.hour) ? @page_count=13 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count.downto(1).each do |i| #each time we parse 3 page
       @mechanize.get("http://www.56135.com/56135/trade/tradeindex///#{i}.html") do |page|
         page.parser.css("div.info_show").each do |entrycontainer|
@@ -183,7 +183,7 @@ module CargoRulesHelper
   
   def run_quzhou_cargo_rule
     @all_raw_cargo=Array.new 
-    (7..16).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page     
+    (7..16).include?(Time.now.hour) ? @page_count=13 : @page_count=1  #in busy time ,we need fetch more page     
     @page_count.downto(1) do |i|
       @mechanize.get("http://56.qz56.com:8081/wl/UserQueryData.jsp?offset=#{i}&likestr=") do |page|      
         page.parser().css("html body div table tbody tr td table tr").each do |tr|
@@ -292,7 +292,8 @@ module CargoRulesHelper
   
   def post_cargo_helper(sitename)    
     @mechanize=Mechanize.new
-    Object::RUBY_PLATFORM.match("linux") ? (@office=false; @production=true)  :@office=true #linux did not need proxy
+@mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)   
+ Object::RUBY_PLATFORM.match("linux") ? (@office=false; @production=true)  :@office=true #linux did not need proxy
     @logger=Logger.new("cargorule.log")
     @cargos=Array.new
     if sitename
