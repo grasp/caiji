@@ -4,11 +4,9 @@ module CargoRulesHelper
   def run_tf56_cargo_rule
   #  @logger.info "run tf56cargo"
     @all_raw_cargo=Array.new    
-    (7..16).include?(Time.now.hour) ? @page_count=13 : @page_count=1  #in busy time ,we need fetch more page  
+    (7..16).include?(Time.now.hour) ? @page_count=5 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count.downto(1).each do |i| #each time we parse 3 page
       page = @mechanize.post("http://www.tf56.com/wshy.asp",{:me_page=>i}) #fetch the page,we get internal url by firefox firebug always,firefox may need latest version like version 8
-      #  page.parser().css(@cargo_rule.maincss).each do |cargo_row|  #parser convert page into nokogiri object
-      # page.parser().css("td.center_content1 td.hydash").each do |cargo_row|  #parser convert page into nokogiri object
       page.parser().css("html body table table table table table tr td.hydash:first").each do |cargo_row|  #parser convert page into nokogiri object  
         cargo_link=cargo_row.css("a").map { |link| link['href'] }  # this solution stole from internet stackover-flow question
         cargo_link=cargo_link[0]
@@ -138,7 +136,7 @@ module CargoRulesHelper
   
   def run_56135_cargo_rule
     @all_raw_cargo=Array.new 
-    (7..16).include?(Time.now.hour) ? @page_count=13 : @page_count=1  #in busy time ,we need fetch more page  
+    (7..16).include?(Time.now.hour) ? @page_count=5 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count.downto(1).each do |i| #each time we parse 3 page
       @mechanize.get("http://www.56135.com/56135/trade/tradeindex///#{i}.html") do |page|
         page.parser.css("div.info_show").each do |entrycontainer|
@@ -183,7 +181,7 @@ module CargoRulesHelper
   
   def run_quzhou_cargo_rule
     @all_raw_cargo=Array.new 
-    (7..16).include?(Time.now.hour) ? @page_count=13 : @page_count=1  #in busy time ,we need fetch more page     
+    (7..16).include?(Time.now.hour) ? @page_count=5 : @page_count=1  #in busy time ,we need fetch more page     
     @page_count.downto(1) do |i|
       @mechanize.get("http://56.qz56.com:8081/wl/UserQueryData.jsp?offset=#{i}&likestr=") do |page|      
         page.parser().css("html body div table tbody tr td table tr").each do |tr|
@@ -277,7 +275,6 @@ module CargoRulesHelper
   def save_cargo(all_raw_cargo)
     #  Cargo.delete_all
     all_raw_cargo.each do |cargo|
-
       begin
         if cargo[:cate_name].size >15
           cargo[:cate_name]=cargo[:cate_name][0,14]
@@ -292,8 +289,12 @@ module CargoRulesHelper
   
   def post_cargo_helper(sitename)    
     @mechanize=Mechanize.new
-@mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)   
- Object::RUBY_PLATFORM.match("linux") ? (@office=false; @production=true)  :@office=true #linux did not need proxy
+  
+    if @os.nil? || @office.nil?
+      env_info=get_env_information #from caiji helper module
+      @os=env_info[0];@office=env_info[1]
+    end
+    @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)    if @os=="linux" && @office==true #in windows post to local server for debug
     @logger=Logger.new("cargorule.log")
     @cargos=Array.new
     if sitename
@@ -307,12 +308,9 @@ module CargoRulesHelper
         second_hash.delete("updated_at")
         second_hash.delete("posted")
         #  @logger.info second_hash
-        if @production
-          @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  
-        else
-          @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  
-        end
-        
+
+         @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  if @os=="linux" && @office==true     
+         @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==true            
         
         cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
         #  @logger.info "cargo.id=#{cargo.id}"
@@ -322,9 +320,10 @@ module CargoRulesHelper
       end
     end
   end
+  #change to conf mode
   
   def run_cargorule(rulename)    
-    prepare_for_rule("cargorule.log")
+     prepare_for_rule("#{rulename}"+".log")
     case rulename
     when "tf56cargo"
       run_tf56_cargo_rule
@@ -337,15 +336,16 @@ module CargoRulesHelper
     when "haoyuncargo"
       run_haoyun_cargo_rule
     else
-    end
-  
+    end  
   end
   
   def cron_run_cargo_rule(sitename,rulename)
     @cargo_rule=CargoRule.where(:sitename=>sitename,:rulename=>rulename).first  
     raise if  @cargo_rule.blank?
     run_cargorule(rulename)
+     @logger.info "#{Time.now} run #{sitename}-#{rulename} done "
     post_cargo_helper(sitename)    
+     @logger.info "#{Time.now} post #{sitename}-#{rulename} done "
   end
 
 end
