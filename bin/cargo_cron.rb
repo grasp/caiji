@@ -43,7 +43,7 @@ Forever.run do
     if hour>6 and hour<22
       begin
        CronCargo.new.cargo_cron("quzhou","quzhoucargo")
-       CronCargo.new.cargo_cron("haoyun","haoyuncargo")
+       CronCargo.new.cargo_cron("haoyun56","haoyuncargo")
       rescue
         puts $@
       end  
