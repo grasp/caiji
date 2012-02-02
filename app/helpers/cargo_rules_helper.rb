@@ -282,7 +282,7 @@ module CargoRulesHelper
         Cargo.new(cargo).save!
       rescue
         @logger.info "excetption on cargo save"
-          @logger.info $@
+        #  @logger.info $@
       end
     end
   end 
