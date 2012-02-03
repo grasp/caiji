@@ -13,53 +13,53 @@ module TruckRulesHelper
           url=tr.css("a").map { |link| link['href'] }         
           unless url.nil?
             url="http://www.tf56.com/"+"TradeCenter/AspData/tCarDetail.asp?iWebBizCarID="+url[0].to_s[-6..-1]
-          #  @logger.info url
+            #  @logger.info url
             @mechanizeb.get(url) do |page2|
               page2.parser.css("html body table tr").each do |tr|               
                 parsed=Array.new
                 tr.css("td").each do |td|
                   parsed<< td.content
                 end
-              #  parsed.each_index do |index|
+                #  parsed.each_index do |index|
                 #  @logger.info "index#{index}=#{parsed[index]}"
-              #  end                
+                #  end                
                 one_truck[:paizhao]=parsed[2] if (parsed[1]||"").match("车牌号码")
                 one_truck[:dunwei]=parsed[2] if (parsed[1]||"").match("吨位")
                 one_truck[:dunwei]=one_truck[:dunwei].gsub("吨","") if (one_truck[:dunwei]||"").match("吨")
                 one_truck[:length]=parsed[2] if (parsed[1]||"").match("车长")
-                 one_truck[:length]=one_truck[:length].gsub("米","") if (one_truck[:length]||"").match("米")
+                one_truck[:length]=one_truck[:length].gsub("米","") if (one_truck[:length]||"").match("米")
                 one_truck[:fcity_name]=parsed[2] if (parsed[1]||"").match("出发地")
                 one_truck[:tcity_name]=parsed[2] if (parsed[1]||"").match("到达地")                                
                 one_truck[:contact]="" if  one_truck[:contact].nil?
                 if (parsed[1]||"").match("手机")
-                one_truck[:contact]<<(parsed[2]||"") 
-                one_truck[:mobilephone]="" if  one_truck[:mobilephone].nil?
-                one_truck[:mobilephone]<<(one_truck[:contact].match(/\d\d\d\d\d\d\d\d\d\d\d/).to_s||"" +",")   if one_truck[:contact].size>10                 
+                  one_truck[:contact]<<(parsed[2]||"") 
+                  one_truck[:mobilephone]="" if  one_truck[:mobilephone].nil?
+                  one_truck[:mobilephone]<<(one_truck[:contact].match(/\d\d\d\d\d\d\d\d\d\d\d/).to_s||"" +",")   if one_truck[:contact].size>10                 
                 end                
                 one_truck[:comments]="" if one_truck[:comments].blank?
                 one_truck[:comments]<<(parsed[2]||"") if (parsed[1]||"").match("车况介绍")     
                 
-            one_truck[:status]="正在配货"  # for match local
-            one_truck[:from_site]="tf56"
-            one_truck[:priority]=200
-            one_truck[:send_date]=1
-            one_truck[:huicheng]="003"
-            one_truck[:user_id]="4e24c1d47516fd513c000002" #admin id            
+                one_truck[:status]="正在配货"  # for match local
+                one_truck[:from_site]="tf56"
+                one_truck[:priority]=200
+                one_truck[:send_date]=1
+                one_truck[:huicheng]="003"
+                one_truck[:user_id]="4e24c1d47516fd513c000002" #admin id            
               end
             end
             #split to city to each line            
             arrivecity=String.new(one_truck[:tcity_name])
-             arrivecity.delete(">").split.each do |arrive_city|
-             another_truck=Hash.new #copy and paste
-             one_truck.each do |key,value|
-               another_truck[key]=value
-             end
-          #  @logger.info "handle city #{arrive_city}"
-             city_array=city_parse(another_truck[:fcity_name],arrive_city)
-             another_truck[:fcity_code]=city_array[0]; another_truck[:tcity_code]=city_array[1]; another_truck[:line]=city_array[2]
-             another_truck[:fcity_name]=city_array[3];another_truck[:tcity_name]=city_array[4]
+            arrivecity.delete(">").split.each do |arrive_city|
+              another_truck=Hash.new #copy and paste
+              one_truck.each do |key,value|
+                another_truck[key]=value
+              end
+              #  @logger.info "handle city #{arrive_city}"
+              city_array=city_parse(another_truck[:fcity_name],arrive_city)
+              another_truck[:fcity_code]=city_array[0]; another_truck[:tcity_code]=city_array[1]; another_truck[:line]=city_array[2]
+              another_truck[:fcity_name]=city_array[3];another_truck[:tcity_name]=city_array[4]
               @all_raw_truck<<another_truck
-             end
+            end
            
           end
         end
@@ -70,7 +70,7 @@ module TruckRulesHelper
   
   def run_56qq_truck_rule
     @all_raw_truck=Array.new
-        pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
+    pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
     @mechanize.cookies.each do |cookie|  #56qq use javascript to write pid into cookie to judge which province or city user want to view,so we have to do by ourself
       if cookie.domain=="www.56qq.cn"
         #  @logger.info   cookie.name
@@ -78,7 +78,7 @@ module TruckRulesHelper
       end
     end
     @mechanize.get("http://www.56qq.cn")# do |page|  #for generate a history, so setcookie will not raise history empty exception
-  #  end     
+    #  end     
     pid_list.each do |pid|
       set_cookie("www.56qq.cn","pid",pid)
       set_cookie("www.56qq.cn","cid",-1)  
@@ -104,10 +104,10 @@ module TruckRulesHelper
                 #   @logger.info "#{cargo[:fcity_name]}-#{cargo[:tcity_name]}"
                 one_truck[:comments]=onetruck[1].gsub(/车源信息：/,"").gsub(/备注内容：/,"").gsub(/联系我时，请说是在56QQ上看到的，谢谢！/,"").gsub(/\s/,"")
                 one_truck[:length]=onetruck[1].match(/\d(\.)\d米/).to_s
-                 one_truck[:dunwei]=onetruck[1].match(/...吨/).to_s
+                one_truck[:dunwei]=onetruck[1].match(/...吨/).to_s
                 one_truck[:paizhao]=one_truck[:comments].match(/车牌号为.......车/) unless one_truck[:comments].blank?
                 one_truck[:contact]=onetruck[2].gsub(/TEL\:/,"") 
-                 one_truck[:paizhao]="未知牌照" if one_truck[:paizhao].blank?
+                one_truck[:paizhao]="未知牌照" if one_truck[:paizhao].blank?
                 #fetch mobilephone and fixphone
                 one_truck[:mobilephone]=one_truck[:contact].match(/1\d\d\d\d\d\d\d\d\d\d/).to_s
                 one_truck[:fixphone]=one_truck[:contact].match(/\d\d\d+-\d\d\d\d\d\d\d+/).to_s  
@@ -133,7 +133,7 @@ module TruckRulesHelper
         end
       end
     end   
-      save_truck(@all_raw_truck)
+    save_truck(@all_raw_truck)
   end
   
   def run_56135_truck_rule
@@ -148,8 +148,8 @@ module TruckRulesHelper
     @all_raw_truck=Array.new
   end
   
-    def save_truck(all_raw_truck)
-     # Truck.delete_all
+  def save_truck(all_raw_truck)
+    # Truck.delete_all
     all_raw_truck.each do |truck|
       begin
         Truck.new(truck).save!
@@ -159,14 +159,18 @@ module TruckRulesHelper
       end
     end
   end 
-    def post_truck_helper(sitename)    
+  def post_truck_helper(sitename)    
     @mechanize=Mechanize.new
+    if @os.nil? || @office.nil?
+      env_info=get_env_information #from caiji helper module
+      @os=env_info[0];@office=env_info[1]
+    end
     @logger=Logger.new("truckrule.log")
     @trucks=Array.new
-@mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)
-#Truck.all.each do |truck|
- #   truck.update_attributes("posted"=>nil) #need set to yes after post
-#end
+
+    #Truck.all.each do |truck|
+    #   truck.update_attributes("posted"=>nil) #need set to yes after post
+    #end
     if sitename
       Truck.where(:posted=>nil,:from_site=>sitename).each do |truck|   
         id=truck.id.to_s
@@ -177,12 +181,15 @@ module TruckRulesHelper
         second_hash.delete("created_at")
         second_hash.delete("updated_at")
         second_hash.delete("posted")
-        #  @logger.info second_hash
-        #if @production
-            @mechanize.post("http://w090.com/trucks/post_truck/#{sitename}",{:truck=>second_hash}) 
-        #else
-         #   @mechanize.post("http://127.0.0.1:4500/trucks/post_truck/#{sitename}",{:truck=>second_hash}) 
-        #end      
+        @logger.info second_hash
+        if @os=="linux" && @office==true  
+          @mechanize.post("http://w090.com/trucks/post_truck",:truck=>second_hash)  
+            
+          @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) 
+        end
+        
+        @mechanize.post("http://127.0.0.1:4500/trucks/post_truck",:truck=>second_hash) if @os=="windows" && @office==true     
+    
   
         truck.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
         #  @logger.info "cargo.id=#{cargo.id}"
@@ -193,7 +200,7 @@ module TruckRulesHelper
     end
   end
   def run_truckrule(sitename,rulename)
-    prepare_for_rule("truckrule.log")
+    prepare_for_rule("./log/#{rulename}.log")
     case rulename
     when "tf56truck"
       run_tf56_truck_rule
