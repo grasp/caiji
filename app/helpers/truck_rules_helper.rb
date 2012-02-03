@@ -1,7 +1,6 @@
 #coding:utf-8
 module TruckRulesHelper  
-  include CaijiHelper
-  
+  include CaijiHelper  
   def run_tf56_truck_rule
     @all_raw_truck=Array.new
     (7..16).include?(Time.now.hour) ? @page_count=1 : @page_count=1  #in busy time ,we need fetch more page       
@@ -183,9 +182,9 @@ module TruckRulesHelper
         second_hash.delete("posted")
         @logger.info second_hash
         if @os=="linux" && @office==true  
-          @mechanize.post("http://w090.com/trucks/post_truck",:truck=>second_hash)  
-            
           @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) 
+          @mechanize.post("http://w090.com/trucks/post_truck",:truck=>second_hash)        
+      
         end
         
         @mechanize.post("http://127.0.0.1:4500/trucks/post_truck",:truck=>second_hash) if @os=="windows" && @office==true     

@@ -1,6 +1,7 @@
 #coding:utf-8
 require 'open-uri'
 require 'nokogiri'  
+require 'zlib'
 module ContactRulesHelper
   
   #illegal character stoped page pase, we only get partial html , we have to refer open-uri to filter those illegal charater
@@ -12,8 +13,8 @@ module ContactRulesHelper
     @page_count=1
     @page_count.downto(1).each do |i|
       response=String.new  
- 
-      open("http://www.56135.com/56135/company/companyindex/////#{i}.html") {|f|          
+
+      open("http://www.56135.com/56135/company/companyindex/////#{i}.html",:proxy =>@proxy) {|f|          
         begin
           f.each_line {|line| response<<line}         
         rescue
@@ -27,7 +28,7 @@ module ContactRulesHelper
         mark_parsed_link<<company_link
        response2=String.new
        #still use ugly way    
-     open(company_link){|f|          
+     open(company_link,:proxy =>@proxy){|f|          
         begin
           f.each_line {|line| response2<<line}         
         rescue
@@ -65,10 +66,14 @@ module ContactRulesHelper
     # (7..9).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page  
     @page_count=1
     @page_count.downto(1).each do |i|
-      @mechanize.get("http://tuge.com/company/#{i}?companytype=alltype") do |page|
+     # @mechanize.open("http://tuge.com/company/#{i}?companytype=alltype") do |page|
+     #try test nokogiri(mechanize also ok) , is also ok,some mechanize only get partial html,really headeak, that why resort to nokogiri
+      page =Nokogiri::HTML(open("http://tuge.com/company/#{i}?companytype=alltype",:proxy=>@proxy))
+    #  @mechanize.open("http://tuge.com/company/#{i}?companytype=alltype") do |page|
         #    @logger.info "parse tuge page1"
   
-        page.parser.css("div.title").each do |clink|
+        #page.parser.css("div.title").each do |clink|
+        page.css("div.title").each do |clink|
           company_link=clink.css("a").map { |link| link['href'] }            
           #  @logger.info company_link[0]
           unless company_link[0].nil?            
@@ -98,7 +103,7 @@ module ContactRulesHelper
               
               # @logger.info one_contact
               @all_raw_contact<< one_contact
-            end
+       #     end
           end
         end
       end
@@ -108,24 +113,22 @@ module ContactRulesHelper
   
   def run_56885_contact_rule
     @all_raw_contact=Array.new
-    # (7..9).include?(Time.now.hour) ? @page_count=3 : @page_count=1  #in busy time ,we need fetch more page  
-    # `set http_proxy=wwwgate0-ch.mot.com:1080`
-    
-  
+     
     @page_count=1
-    @page_count.downto(1).each do |i|
-           
-      @mechanize.get("http://www.56885.net/yp_add_vlist.asp?id=52&page=#{i}") do |page|
-        @logger.info "parse 56885 page1"
-        #  @logger.info  page.parser.css("table tr td p a strong")[2].text
-        @logger.info  page.parser.to_html
+    @page_count.downto(1).each do |i|           
+     #   page =Nokogiri::HTML(open("http://www.56885.net/yp_add_vlist.asp?id=52&page=#{i}",:proxy=>@proxy)) #still not work as mechaniz3
+   #  @mechanize.user_agent_alias = 'Windows IE 6'
+   #  ENCODING =  'GB2312' # 'UTF-8'
+    html = Nokogiri::HTML(open("http://www.56885.net/yp_add_vlist.asp?id=52&page=#{i}",:proxy=>@proxy))
+      
+
+@logger.info html
+   #   @mechanize.get("http://www.56885.net/yp_add_vlist.asp?id=52&page=#{i}") do |page|
+      @logger.info "parse 56885 page1"
+      @logger.info  page.to_html
         if false
           page.parser.xpath("/html/body/table[6]/tbody/tr/td[3]/table[2]/tbody/tr/td/p/a/strong").each do |tr |
             @logger.info tr.content
-            # company_link=tr.css("td a").map { |link| link['href'] }
-            # @logger.info company_link          
-       
-            #  @logger.info company_link[0]
             unless company_link[0].nil?            
               detail_link=company_link[0].gsub("company_","elibrary/introduction_")
               #  @logger.info  detail_link
@@ -147,13 +150,11 @@ module ContactRulesHelper
                 one_contact[:companytype]=other_info[1].content
                 one_contact[:registermoney]=other_info[5].content
                 one_contact[:create_time]=other_info[7].content
-                one_contact[:companyurl]=other_info[9].content   
-              
-                one_contact[:from_site]="56885"  
-              
+                one_contact[:companyurl]=other_info[9].content                 
+                one_contact[:from_site]="56885"                
                 # @logger.info one_contact
                 @all_raw_contact<< one_contact
-              end
+         #     end
             end
           end
         end

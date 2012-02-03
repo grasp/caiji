@@ -25,8 +25,8 @@
 
 <% @contact_rules.each do |contact_rule| %>
   <tr>
-    <td><a  class="btn default" href="/contact_rules/run_contact_rule/<%=contact_rule.id%>">Run</a></td>
-    <td><a  class="btn default" href="/contact_rules/get_all_contact/<%=contact_rule.rulename%>">Contacts</a></td>
+    <td><a  class="btn default" href="/contact_rules/run_contact_rule/<%=contact_rule.id%>" target="_blank">Run</a></td>
+    <td><a  class="btn default" href="/contact_rules/get_all_contact/<%=contact_rule.sitename%>" target="_blank">Contacts</a></td>
     <td><%= contact_rule.sitename %></td>
     <td><%= contact_rule.rulename %></td>
     <td><%= contact_rule.caiji_freq %></td>

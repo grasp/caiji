@@ -7,7 +7,6 @@ class TruckRulesController < ApplicationController
   layout "caiji"
   def index
     @truck_rules = TruckRule.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @truck_rules }
@@ -28,7 +27,6 @@ class TruckRulesController < ApplicationController
   # GET /truck_rules/new.json
   def new
     @truck_rule = TruckRule.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @truck_rule }

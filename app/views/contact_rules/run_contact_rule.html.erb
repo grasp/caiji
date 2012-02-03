@@ -1,12 +1,24 @@
-<h1>Run Truck rule result</h1>
+<h1>Run <%=@contact_rule.sitename%>-<%=@contact_rule.rulename%>-Result</h1>
 
 <table>
-  <th>mphone</th>
 
-<%@all_raw_contact.each do |contact|%>
-  <tr>
-   <td><%=contact[:mphone]%></td>
-  </tr>
-<%end%>
-  
-  </table>
+  <th>mphone</th>
+  <th>fixphone</th>
+  <th>email</th>
+  <th>qq</th>
+  <th>companyname</th>
+  <th>intro</th>
+  <th>personname</th>
+  <%@all_raw_contact.each do |contact|%>
+    <tr>
+      <td><%=contact[:mphone]%></td>
+      <td><%=contact[:fixphone]%></td>
+      <td><%=contact[:email]%></td>
+      <td><%=contact[:QQ]%></td>
+      <td><%=contact[:companyname]%></td>
+      <td><%=contact[:intro]%></td>
+      <td><%=contact[:personname]%></td>
+    </tr>
+  <%end%>
+
+</table>

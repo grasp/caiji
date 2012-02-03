@@ -1,12 +1,15 @@
 <h1>Get contact of caiji</h1>
 <table>
   <th>mphone</th>
-
-     
+  <th>fixphone</th>
+      <th>email</th>
+      <th>qq</th>
   <%@contacts.each do |contact|%>
   <tr>
     <td><%=contact.mphone%></td>
- 
+   <td><%=contact.fixphone%></td>
+    <td><%=contact.email%></td>
+    <td><%=contact.QQ%></td>
   </tr>
   <%end%>
   

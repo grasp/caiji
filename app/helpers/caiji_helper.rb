@@ -52,7 +52,9 @@ module CaijiHelper
   
   def prepare_for_rule(logname)
     @logger=Logger.new(logname)
+    
     @mechanize=Mechanize.new; 
+    
     @mechanizeb=Mechanize.new
     
     if @os.nil? || @office.nil?
@@ -62,9 +64,15 @@ module CaijiHelper
     
     @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
     @mechanizeb.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
+    if  @office==true
+@proxy="http://wwwgate0-ch.mot.com:1080" 
+else
+  @proxy=nil
+end
     
     @mechanize.cookie_jar.load_cookiestxt(StringIO.new(load_cookie))  
-    @mechanize.user_agent_alias = 'Windows Mozilla'
+  @mechanize.user_agent_alias = 'Windows Mozilla'
+  #   @mechanize.user_agent_alias = 'Windows IE 6'
   end
 
   def set_cookie(domain,name,value)

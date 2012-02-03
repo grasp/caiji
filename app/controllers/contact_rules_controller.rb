@@ -89,7 +89,7 @@ class ContactRulesController < ApplicationController
   end
   
   def get_all_contact
-    
+    @contacts=Contact.where(:from_site=>params[:from_site])
   end
   
 end
