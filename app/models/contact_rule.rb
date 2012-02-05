@@ -15,4 +15,5 @@ class ContactRule
   field :year_count, :type => Integer
   field :repeat_count, :type => Integer
   field :last_page,:type => Integer
+  field :grasped_array,:type => String #for record province array
 end

@@ -329,15 +329,80 @@ module ContactRulesHelper
   end
   end
   
-  def run_yunli51_contact_rule    
-    province_list={"110000"=>300,"120000"=>158,"130000"=>850,"140000"=>377,
+  def run_yunli51_contact_rule 
+  @page_count=get_last_page_number_of_contact("yunli51")  #just get @contact rule
+
+  province_list={"110000"=>300,"120000"=>158,"130000"=>850,"140000"=>377,
                   "150000"=>344,"210000"=>429,"220000"=>202,"230000"=>344,"310000"=>516,"320000"=>827,
                   "330000"=>347, "340000"=>294,"350000"=>126,"360000"=>188,"370000"=>1195,
                    "410000"=>600, "420000"=>210,"430000"=>129,"440000"=>590,"450000"=>113,"460000"=>47,
                     "500000"=>45, "510000"=>220,"520000"=>17,"530000"=>63,"540000"=>8,
                   }
-                  
-    
+   left_province=Array.new               
+  grasped_province= @contact_rule.grasped_array.split("#")    unless @contact_rule.grasped_array.nil?    
+  all_province= province_list.keys  
+  if grasped_province.nil?
+  left_province=all_province
+  else
+    left_province=all_province-grasped_province
+  end
+  left_province.each do |province|
+  # province_list.each do |province,total_page|
+  total_page=province_list[province]
+     total_page.downto(1).each do |i|
+     page = @mechanize.get("http://www.51yunli.com/company/#{province}/#{i}/0/_0")
+     puts "51yunli start #{province} page #{i}"
+     raw_array=Array.new
+     page.parser.css("p.b_newcolor").each do |line|     
+      raw_array<<line
+     end
+      @all_raw_contact=Array.new
+      raw_array.each_index do |index|        
+        if index%3==0
+          @one_contact=Hash.new
+          raw_name_array=Array.new
+          raw_array[index].css("span").each do |span|
+           raw_name_array<< span.content
+          end          
+          @one_contact[:companyname]=raw_name_array[1]
+          @one_contact[:address]=raw_name_array[2]
+        end
+        
+        if index%3==1
+           raw_name_array=Array.new
+          raw_array[index].css("span").each do |span|
+           raw_name_array<< span
+          end
+         # raw_name_array.each_index do |index|
+         #   @logger.info "index#{index}=#{raw_name_array[index]}"
+        #  end
+        unless raw_name_array[1].content.nil?
+         @one_contact[:mphone]=raw_name_array[1].content.match(/\d\d\d\d\d\d\d\d\d\d\d/).to_s
+         @one_contact[:fixphone]=raw_name_array[1].content.match(/\d\d+-\d\d\d\d\d\d\d(\d)/).to_s
+         @one_contact[:companytype]=raw_name_array[1].content.match(/\[.*\]/mu).to_s.gsub(/\[/,"").gsub(/\]/,"")
+         @one_contact[:personname]=raw_name_array[1].content.match(/\s.*\[/mu).to_s.gsub(/\[/,"")
+        end
+        unless raw_name_array[2].to_s.nil?
+          @one_contact[:QQ]=raw_name_array[2].to_s.match(/uin=\d\d\d\d\d+/).to_s
+          @one_contact[:QQ]=@one_contact[:QQ].gsub("uin=","") unless @one_contact[:QQ].nil?
+        end
+        end
+        if index%3==2
+         @one_contact[:intro]=raw_array[index].content
+          @one_contact[:from_site]="yunli51"
+        # @logger.info   @one_contact
+         @all_raw_contact<< @one_contact
+        end      
+      end
+         save_contact
+         puts "51yunli #{province} page #{i} done!"
+     end
+     #updated province as grasped
+     @contact_rule.grasped_array="" if @contact_rule.grasped_array.nil?
+     @contact_rule.update_attribute(:grasped_array,@contact_rule.grasped_array+"#"+province.to_s)
+   
+   end
+     
   end
   
   def save_contact

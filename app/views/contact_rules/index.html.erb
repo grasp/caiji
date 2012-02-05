@@ -3,6 +3,9 @@
   <%all=Contact.count%>
   Total:<%=all%>
 </p>
+<p>mphone:<%=Contact.where(:mphone.ne=>nil).count%></p>
+ <p>email:<%=Contact.where(:email.ne=>nil).count%></p>
+ <p>QQ:<%=Contact.where(:QQ.ne=>nil).count%></p>
 <table>
   <tr>
     <th>Run</th>
@@ -60,6 +63,7 @@
     <td><%= link_to 'Show', contact_rule %></td>
     <td><%= link_to 'Edit', edit_contact_rule_path(contact_rule) %></td>
     <td><%= link_to 'Destroy', contact_rule, confirm: 'Are you sure?', method: :delete %></td>
+ <td><%= contact_rule.grasped_array %></td>
   </tr>
 <% end %>
 </table>
