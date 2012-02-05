@@ -1,11 +1,19 @@
 <h1>Listing contact_rules</h1>
-
+<p>
+  <%all=Contact.count%>
+  Total:<%=all%>
+</p>
 <table>
   <tr>
     <th>Run</th>
     <th>Contacts</th>
+    <th>sitecount</th>
+     <th>mphone</th>
+      <th>email</th>
+       <th>qq</th>
     <th>Sitename</th>
     <th>Rulename</th>
+        <th>Lastpage</th>
     <th>Caiji freq</th>
     <th>Need post</th>
     <th>Post freq</th>
@@ -24,11 +32,17 @@
   </tr>
 
 <% @contact_rules.each do |contact_rule| %>
+  <%sitecount=Contact.where(:from_site=>contact_rule.sitename).count%>
   <tr>
     <td><a  class="btn default" href="/contact_rules/run_contact_rule/<%=contact_rule.id%>" target="_blank">Run</a></td>
     <td><a  class="btn default" href="/contact_rules/get_all_contact/<%=contact_rule.sitename%>" target="_blank">Contacts</a></td>
+     <td><%= sitecount %>-<%=((sitecount/all).to_f)*100%>%</td>
+           <td><%= Contact.where(:mphone.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
+  <td><%= Contact.where(:email.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
+   <td><%= Contact.where(:QQ.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
     <td><%= contact_rule.sitename %></td>
     <td><%= contact_rule.rulename %></td>
+        <td><%= contact_rule.last_page %></td>
     <td><%= contact_rule.caiji_freq %></td>
     <td><%= contact_rule.need_post %></td>
     <td><%= contact_rule.post_freq %></td>
@@ -53,3 +67,5 @@
 <br />
 
 <%= link_to 'New Contact rule', new_contact_rule_path %>
+
+

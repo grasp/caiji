@@ -76,6 +76,7 @@ class  Cargo
    #   :contact=>self.contact,:comments=>self.comments,:from_site=>self.from_site ).count 
         repeated=Cargo.where(:cate_name=>self.cate_name,:line=>self.line,:user_id=>self.user_id,:status=>"正在配车",
      :contact=>self.contact,:from_site=>self.from_site ).count 
+    puts "repeated=#{repeated}"
   if  repeated > 0
     if Time.now-repeated.created_at<900
       puts "repeated=#{repeated}"

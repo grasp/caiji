@@ -3,7 +3,7 @@ module TruckRulesHelper
   include CaijiHelper  
   def run_tf56_truck_rule
     @all_raw_truck=Array.new
-    (7..16).include?(Time.now.hour) ? @page_count=1 : @page_count=1  #in busy time ,we need fetch more page       
+    (7..16).include?(Time.now.hour) ? @page_count=5 : @page_count=1  #in busy time ,we need fetch more page       
     @page_count.downto(1).each do |i|
       @mechanize.get("http://www.tf56.com/wscy.asp",{:me_page=>i}) do |page|
         page.parser().css("tr td.hydash:first").each do |tr|

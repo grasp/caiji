@@ -18,6 +18,8 @@ module CargoRulesHelper
           parsed= page.parser.css("html body table table table table table table tr td.hytitle") #mannully map all information to ours
           one_cargo[:cate_name]=parsed[1].content unless parsed[1].blank? ;        one_cargo[:cargo_weight]=parsed[2].content   unless parsed[2].blank?
           one_cargo[:fcity_name]=parsed[3].content unless parsed[3].blank?;         one_cargo[:tcity_name]=parsed[4].content  unless parsed[4].blank?
+          one_cargo[:fcity_name]=get_city_full_name(one_cargo[:fcity_code]) unless one_cargo[:fcity_code].nil?
+          one_cargo[:tcity_name]=get_city_full_name(one_cargo[:tcity_code]) unless one_cargo[:tcity_code].nil?
           unless parsed[5].blank?
             unless parsed[5].content.blank?
               one_cargo[:comments]="车辆要求:"+ parsed[5].content 
@@ -98,8 +100,8 @@ module CargoRulesHelper
                 cargo[:fcity_code]=onecargo[0][0]
                 cargo[:tcity_code]=onecargo[0][1]
                 cargo[:line]=(cargo[:fcity_code]||"")+"#"+(cargo[:tcity_code]||"")
-                cargo[:fcity_name]=CityTree.get_city_full_path(cargo[:fcity_code])
-                cargo[:tcity_name]=CityTree.get_city_full_path(cargo[:tcity_code])  
+                cargo[:fcity_name]=get_city_full_name(cargo[:fcity_code]) unless cargo[:fcity_code].nil?
+                cargo[:tcity_name]=get_city_full_name(cargo[:tcity_code]) unless cargo[:tcity_code].nil? 
                 #   @logger.info "#{cargo[:fcity_name]}-#{cargo[:tcity_name]}"
                 cargo[:comments]=onecargo[1].gsub(/货源信息：/,"").gsub(/备注内容：/,"").gsub(/联系我时，请说是在56QQ上看到的，谢谢！/,"").gsub(/\s/,"")
                 cargo[:cargo_weight]=onecargo[1].match(/\d\d\d吨|\d\d吨|\d吨|\d方|\d\d方/).to_s
@@ -150,7 +152,8 @@ module CargoRulesHelper
           cargo[:tcity_name]=to_name
           city_array=city_parse(cargo[:fcity_name],cargo[:tcity_name])
           cargo[:fcity_code]=city_array[0]; cargo[:tcity_code]=city_array[1]; cargo[:line]=city_array[2]
-          
+           cargo[:fcity_name]=get_city_full_name(cargo[:fcity_code]) unless cargo[:fcity_code].nil?
+            cargo[:tcity_name]=get_city_full_name(cargo[:tcity_code]) unless cargo[:tcity_code].nil? 
       
           packinfo=entrycontainer.css("div.c_line").text.match(/货品属性.*$/u).to_s
           raw_array0= packinfo.match(/货品属性：.*重量：/u).to_s.gsub("货品属性：","").gsub("重量：","").to_s      
@@ -203,7 +206,8 @@ module CargoRulesHelper
               
               city_array=city_parse(one_cargo[:fcity_name],one_cargo[:tcity_name])
               one_cargo[:fcity_code]=city_array[0]; one_cargo[:tcity_code]=city_array[1]; one_cargo[:line]=city_array[2]
-          
+               one_cargo[:fcity_name]=get_city_full_name(one_cargo[:fcity_code]) unless one_cargo[:fcity_code].nil?
+                one_cargo[:tcity_name]=get_city_full_name(one_cargo[:tcity_code]) unless one_cargo[:tcity_code].nil? 
               one_cargo[:cargo_weight]=(one_item_array[4]||"0").strip+(one_item_array[5]||"").strip
               one_cargo[:price]=(one_item_array[6]||"0").strip+(one_item_array[7]||"").strip
               one_cargo[:comments] = "车辆要求"+(one_item_array[8]||"0").strip+(one_item_array[9]||"").strip
@@ -249,6 +253,7 @@ module CargoRulesHelper
             one_cargo[:cate_name]=(raw_cargo[0]||"未知货物").strip  
             one_cargo[:fcity_name]=raw_cargo[1].strip   
             one_cargo[:tcity_name]=raw_cargo[2].strip  
+            
             one_cargo[:cargo_weight]=raw_cargo[3].strip  
             one_cargo[:price]=raw_cargo[4].strip 
             one_cargo[:contact]=raw_cargo[5].strip 
@@ -258,6 +263,8 @@ module CargoRulesHelper
             one_cargo[:fixphone]= one_cargo[:contact].strip.match(/\d\d\d\d-\d\d\d\d\d\d\d+/).to_s
             city_array=city_parse(one_cargo[:fcity_name],one_cargo[:tcity_name])
             one_cargo[:fcity_code]=city_array[0]; one_cargo[:tcity_code]=city_array[1]; one_cargo[:line]=city_array[2]
+              one_cargo[:fcity_name]=get_city_full_name(one_cargo[:fcity_code]) unless one_cargo[:fcity_code].nil?
+                one_cargo[:tcity_name]=get_city_full_name(one_cargo[:tcity_code]) unless one_cargo[:tcity_code].nil? 
             one_cargo[:send_date]=1
             one_cargo[:from_site]="haoyun56"
             one_cargo[:created_at]=Time.now
@@ -273,7 +280,7 @@ module CargoRulesHelper
   end
   
   def save_cargo(all_raw_cargo)
-    #  Cargo.delete_all
+      Cargo.delete_all
     all_raw_cargo.each do |cargo|
       begin
         if cargo[:cate_name].size >15

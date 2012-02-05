@@ -52,7 +52,7 @@ module CaijiHelper
   
   def prepare_for_rule(logname)
     @logger=Logger.new(logname)
-    
+       Encoding.default_internal="UTF-8"
     @mechanize=Mechanize.new; 
     
     @mechanizeb=Mechanize.new
@@ -117,4 +117,9 @@ end
     return city_code_line
   end
   
+  def get_last_page_number_of_contact(sitename)
+      @contact_rule=ContactRule.where(:sitename=>sitename).first
+      page_count=@contact_rule.last_page ||1
+      return  page_count
+  end
 end

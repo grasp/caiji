@@ -14,4 +14,5 @@ class ContactRule
   field :mongth_count, :type => Integer
   field :year_count, :type => Integer
   field :repeat_count, :type => Integer
+  field :last_page,:type => Integer
 end

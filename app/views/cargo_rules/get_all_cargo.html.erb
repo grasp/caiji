@@ -15,6 +15,8 @@
      <th>固定电话</th>
      <th>移动电话</th>
       <th>posted</th>
+       <th>created_at</th>
+        <th>updated_at</th>
 <% @cargos.each do |cargo|%>
      <tr>
        <td><%=cargo[:fcity_name]%>-<%=cargo[:fcity_code]%></td>
@@ -28,7 +30,9 @@
            <td><%=cargo[:fixphone]%></td>
            <td><%=cargo[:mobilephone]%></td>
             <td><%=cargo[:posted]%></td>
-       </tr> 
+ <td><%=cargo[:created_at]%></td>
+  <td><%=cargo[:updated_at]%></td>
+     </tr> 
 <%end%>
   </table>
 

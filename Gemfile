@@ -37,7 +37,7 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 #gem "will_paginate", "~> 3.0.pre2"
-gem 'mongoid'
+gem 'mongoid' , "2.4.3"
 gem 'mechanize' , "2.0.1"#must be 2.0.1,2.1 will hae issue on ruby1.9.3
 gem 'sqlite3'
 

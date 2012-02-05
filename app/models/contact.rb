@@ -3,7 +3,6 @@ class  Contact
   include Mongoid::Document
   include Mongoid::Timestamps
 
-
   field :mphone, :type=>String
   field :fixphone, :type=>String  
   field :QQ, :type=>String
@@ -20,7 +19,7 @@ class  Contact
   field :registermoney, :type=>String
    field :fax, :type=>String   
   field :others, :type=>String
-  
+  field :zipcode, :type=>String
   #for tuiguang
   field :smssent, :type=>Integer   
   field :mailsent, :type=>Integer 
@@ -31,11 +30,14 @@ class  Contact
   index :mphone
   index :QQ
   index :email
-
-  before_create :check_unique
-  
+ before_create :check_unique
+#validates_uniqueness_of :mphone
   def check_unique
-   repeated=Contact.where(:mphone=>self.mphone,:QQ=>self.QQ,:email=>self.email,:fixphone=>self.fixphone).count 
+    repeated=0
+  # repeated=Contact.where(:mphone=>self.mphone).count 
+   repeated=Contact.count(conditions: { :mphone=>self.mphone,:QQ=>self.QQ,:email=>self.email,:fixphone=>self.fixphone,:personname=>self.personname,:from_site=>self.from_site})
+  logger.info "repeated=#{repeated}"
+   puts "repeated=#{repeated}"
   if  repeated > 0
       return false
   end

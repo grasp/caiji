@@ -89,7 +89,18 @@ class ContactRulesController < ApplicationController
   end
   
   def get_all_contact
-    @contacts=Contact.where(:from_site=>params[:from_site])
+     @total_contact=Contact.count
+    @total_site_contact=Contact.where(:from_site=>params[:from_site]).count
+    @contacts=Contact.where(:from_site=>params[:from_site]).desc(:created_at).paginate(:page=>params[:page]||1,:per_page=>100) 
+    logger.info Contact.where(:from_site=>nil).count
+    puts "from site=nil="+Contact.where(:from_site=>nil).count.to_s
+    Contact.where(:from_site=>nil).each do |contact|
+      contact.delete
+    end
+    
+    Contact.where(:from_site=>"tuge",:email=>nil,:mphone=>nil,:qq=>nil).each do |contact|
+      contact.delete
+    end
   end
   
 end
