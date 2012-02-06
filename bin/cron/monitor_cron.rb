@@ -7,18 +7,18 @@ Forever.run do
     every 1.minutes do
     check_process=`ps -ef |grep cron`
  unless check_process.match(/cargo_cron\.rb/m)
-`ruby /opt/vob/hunter/caiji/bin/cargo_cron.rb` #ugly hard code
+`ruby /opt/vob/hunter/caiji/bin/cron/cargo_cron.rb` #ugly hard code
  logger.info "try start cargo cron #{Time.now}"
 end
 
 
  unless check_process.match(/truck_cron\.rb/m)
- `ruby /opt/vob/hunter/caiji/bin/truck_cron.rb`
+ `ruby /opt/vob/hunter/caiji/bin/cron/truck_cron.rb`
 logger.info "try start truck cron #{Time.now}"
 end
 
 unless check_process.match(/expire_cron\.rb/m)
-`ruby /opt/vob/hunter/caiji/bin/expire_cron.rb`
+`ruby /opt/vob/hunter/caiji/bin/cron/expire_cron.rb`
 logger.info "try start expire cron #{Time.now}"
 end
 
