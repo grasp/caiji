@@ -301,7 +301,7 @@ module CargoRulesHelper
       env_info=get_env_information #from caiji helper module
       @os=env_info[0];@office=env_info[1]
     end
-    @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)    if @os=="linux" && @office==true #in windows post to local server for debug
+  #  @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080)    if @os=="linux" && @office==true #in windows post to local server for debug
     @logger=Logger.new("cargorule.log")
     @cargos=Array.new
     if sitename
@@ -316,8 +316,8 @@ module CargoRulesHelper
         second_hash.delete("posted")
         #  @logger.info second_hash
 
-         @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  if @os=="linux" && @office==true     
-         @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==true            
+         @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  if @os=="linux" && @office==false
+         @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==false        
         
         cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
         #  @logger.info "cargo.id=#{cargo.id}"

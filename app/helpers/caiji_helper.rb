@@ -26,7 +26,7 @@ module CaijiHelper
     cookie_dir ="C:\\Documents and Settings\\Administrator\\Application Data\\Mozilla\\Firefox\\Profiles\\tttk3240.default"  if @os=="windows" && @office==false
     cookie_dir ="D:\\Profiles\\w22812\\Application Data\\Mozilla\\Firefox\\Profiles\\623tc49u.default"   if @os=="windows" && @office==true
     cookie_dir="/home/netmon/ului265f"   if @os=="linux" && @office==true
-    cookie_dir ="/home/hunter/.mozilla/firefox/h9tayj2y.default" if @os=="linux" && @office==false
+    cookie_dir ="/home/hunter/.mozilla/firefox/5vgx7pnx.default" if @os=="linux" && @office==false
     $cookie_dir=cookie_dir
     return cookie_dir
   end

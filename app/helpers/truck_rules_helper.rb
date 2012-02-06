@@ -181,8 +181,8 @@ module TruckRulesHelper
         second_hash.delete("updated_at")
         second_hash.delete("posted")
         @logger.info second_hash
-        if @os=="linux" && @office==true  
-          @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) 
+        if @os=="linux" && @office==false
+        #  @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) 
           @mechanize.post("http://w090.com/trucks/post_truck",:truck=>second_hash)        
       
         end
