@@ -12,16 +12,19 @@ module ContactRulesHelper
     @page_count=get_last_page_number_of_contact("56135")
     @page_count.downto(1).each do |i|
           @all_raw_contact=Array.new
-    mark_parsed_link=Array.new
-      
+    mark_parsed_link=Array.new      
       response=String.new  
       puts "56135 start grasp page #{i}"
+      begin
       open("http://www.56135.com/56135/company/companyindex/////#{i}.html",:proxy =>@proxy) {|f|          
         begin
           f.each_line {|line| response<<line}         
-        rescue
+        rescue          
         end
       }
+      rescue
+        next
+      end
       response.scan(/\/56135\/company\/member\/.\d\d\d+\.html/imx).each do |matched|
         one_contact=Hash.new
         company_link="http://www.56135.com"+matched.to_s          

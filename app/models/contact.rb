@@ -24,7 +24,8 @@ class  Contact
   field :smssent, :type=>Integer   
   field :mailsent, :type=>Integer 
   field :qqsent, :type=>Integer
-  
+  field :gen, :type=>Integer#makr it as generated, as gen phone always interuppted
+  field :genemail, :type=>Integer#makr it as generated, as gen phone always interuppted
   index :created_at
   index :from_site
   index :mphone

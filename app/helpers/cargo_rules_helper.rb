@@ -315,8 +315,11 @@ module CargoRulesHelper
         second_hash.delete("updated_at")
         second_hash.delete("posted")
         #  @logger.info second_hash
-
+         begin
          @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  if @os=="linux" && @office==false
+         rescue
+         puts "post cargo Exception"
+         end
          @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==false        
         
         cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate

@@ -6,6 +6,23 @@
 <p>mphone:<%=Contact.where(:mphone.ne=>nil).count%></p>
  <p>email:<%=Contact.where(:email.ne=>nil).count%></p>
  <p>QQ:<%=Contact.where(:QQ.ne=>nil).count%></p>
+ 
+  <p>filtered email=<%=Email.count%>,false email=<%=Email.where(:valid=>false).count%>,true email=<%=Email.where(:valid=>true).count%></p>
+  <p>filtered mphone=<%=Mphone.count%>,yidong=<%=Mphone.where(:operator=>1).count%>,liantong=<%=Mphone.where(:operator=>2).count%>
+   dianxin=<%=Mphone.where(:operator=>3).count%>,other=<%=Mphone.where(:operator=>0).count%>
+  </p>
+  <p>
+    mphone not sent=<%=Mphone.where(:scount=>nil).count%>
+    mphone sent one=<%=Mphone.where(:scount=>1).count%>
+  </p>
+  <p>
+  <ul>
+    http://www.huisun.com/company/</ul>
+    <ul>  http://www.56news.cn/Company/all_company.aspx</ul>
+    <ul>  http://www.chinawutong.com/co/cowuliu_01/LinkUs.aspx?id=701358</ul>
+    <ul>http://www.beyondnet.com.cn</ul>
+    <ul>http://www.wuliu800.com/companylist.php?keyword=%E8%AF%B7%E8%BE%93%E5%85%A5%E6%9F%A5%E8%AF%A2%E4%BC%81%E4%B8%9A%E5%85%B3%E9%94%AE%E5%AD%97</ul>
+  </p>
 <table>
   <tr>
     <th>Run</th>
