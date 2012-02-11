@@ -18,21 +18,23 @@ require File.join(project_root,"app","helpers","cities_helper.rb")
 Mongoid.database = Mongo::Connection.new('localhost', 27017).db('caiji_development') #first set as grasp
 
  File.open("notsentemail.txt").each do |libemail|
-  if libemail.match(/\d\d\d\d\d\d\d\d\d\d\d/)
-    if Email.where(:email=>libemail.strip).count==0
+  unless libemail.nil?
+      email=Email.where(:email=>libemail.strip).first
+    if email.nil?
     Email.create(:email=>libemail.strip) 
     puts "update #{libemail.strip}"
-    else
-      
     end
   end
 end
 
 File.open("sentoneemail.txt").each do |libemail|
-  if libemail.match(/\d\d\d\d\d\d\d\d\d\d\d/)
-    if Email.where(:email=>libemail.strip).count==0
+  unless libemail.nil?
+    email=Email.where(:email=>libemail.strip).first
+    if email.nil?
      Email.create(:email=>libemail.strip) 
     puts "update #{libemail.strip}"
+    else
+      email.update_attribute(:scount,1)
    end
   end
 end

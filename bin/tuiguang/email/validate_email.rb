@@ -37,8 +37,7 @@ end
 $invalid=0;
 $validated_domain=[]
 start=Time.now
-
-#LibEmail.where(:status.ne=>"disabled").each do |libemail|   
+ 
   Email.where(:valid=>nil).each do |email|   
   #validate format
   if not EmailAddressValidator.validate_with_regex(email.address)

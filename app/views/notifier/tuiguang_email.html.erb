@@ -1,0 +1,66 @@
+<%#coding:utf-8%>
+<h3>尊敬的<%=@user%>,您好！</h3>
+<p>
+<h2> <a href="http://w090.com"> 物流零距离网站介绍 - w090.com </a></h2>
+<h3>物流零距离网站是永久免费的面向全国的即时货源和即时车源网站.</h3>
+<h3>为货主和物流公司以及广大的物流从业者搭建一个畅通无阻的物流信息平台.</h3>
+</p>
+
+<h3>今日最新货源信息</h3>
+<table>
+  <th>出发</th>
+  <th>到达</th>
+  <th>货物</th>
+  <th>重量</th>
+  <th>有效</th>      
+  <th>发布日期</th>
+  <%@cargos.each do |cargo|%>
+    <tr>
+      <td><%=cargo.fcity_name%></td>
+      <td><%=cargo.tcity_name%></td>
+      <td><%=cargo.cate_name%></a></td>
+      <td><%=cargo.cargo_weight||"0" %>吨/<%= cargo.cargo_bulk ||0 %>方</td>
+      <td><%=cargo.send_date%>天</td>
+      <td><%=cargo.created_at.localtime.to_s.slice(0,19) unless cargo.updated_at.nil? %></td>
+    </tr>
+  <%end%>
+</table>
+
+<h3>今日最新车源信息</h3>
+<table>
+  <th>出发</th>
+  <th>到达</th>
+   <th>车辆</th>
+    <th>回程</th>
+    <th>有效</th>
+    <th>发布时间</th>
+  <%@trucks.each do |truck|%>
+    <tr>
+          <td><%= truck.fcity_name %></td>
+          <td><%= truck.tcity_name %></td>     
+            <td>
+              <%=truck.paizhao%>,<%=truck.dunwei%>吨
+              <%=truck.length%>米 <%=$truck_shape[truck.shape]%>            
+            </td>
+          <td><%=$truck_huicheng[truck.huicheng]%></td>
+
+          <td ><%= truck.send_date %>天</td>
+      <td ><%= truck.created_at.localtime.to_s.slice(0,19) %></td>
+    </tr>
+  <%end%>
+</table>
+<p>
+<h2>近期更新：</h2>
+<h3>稳定了货源信息的显示，每日最多达到万条货源，并且会不断增加中.</h3>
+</p>
+
+<p>
+<h2>正在准备的功能：</h2>
+ <h3>无需任何专用Gps设备，基于手机的车辆位置管理，可以在物流零距离上查询到你的车辆的当前位置和形势轨迹.</h3>
+</p>
+
+<p>我们不会滥用您的邮箱，只会发非常必要的信息给您或者你主动订阅的邮件.</p>
+<p><a href="http://w090.com"> 更多信息,请访问物流零距离 http://w090.com</a></p>
+
+
+<p>-物流零距离开发团队倾情奉献</p>

@@ -37,7 +37,7 @@ require File.join(project_root,"app","models","truck_rule.rb")
 require File.join(project_root,"app","helpers","cargo_rules_helper.rb")
 require File.join(project_root,"app","helpers","truck_rules_helper.rb")
 
-require File.join(project_root,"bin","tuiguang","utility","check_operator.rb")
+require File.join(project_root,"bin","tuiguang","mphone","check_operator.rb")
 
 
 
