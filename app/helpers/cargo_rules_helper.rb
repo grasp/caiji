@@ -280,7 +280,7 @@ module CargoRulesHelper
   end
   
   def save_cargo(all_raw_cargo)
-      Cargo.delete_all
+   #   Cargo.delete_all
     all_raw_cargo.each do |cargo|
       begin
         if cargo[:cate_name].size >15
@@ -320,8 +320,8 @@ module CargoRulesHelper
          rescue
          puts "post cargo Exception"
          end
-         @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==false        
-        
+       #  @mechanize.post("http://127.0.0.1:4500/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==false        
+        @mechanize.post("http://w090.com/cargos/post_cargo",:cargo=>second_hash)  if @os=="windows" && @office==false        
         cargo.id=id  #I dont know why we need this ,due to I see id was set to nil before udpate
         #  @logger.info "cargo.id=#{cargo.id}"
         cargo.update_attributes("posted"=>"yes")
