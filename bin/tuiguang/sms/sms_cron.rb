@@ -18,20 +18,21 @@ $mongo=Mongo::Connection.new('192.168.2.4', 27017)
 Mongoid.database = $mongo.db('caiji_development') 
 
 
-sent_time=[8,9,10,11,12,14,15,16,17,18,19]
+sent_time=[8,9,10,11,12,14,15,16,17,19]
+fail_count=0
 while true do 
 if sent_time.include?(Time.now.hour)
- daily_count=Mphone.where(:scount=>1,:updated_at.gte=>Time.now.at_beginning_of_day).count 
+ daily_count=Mphone.where(:scount=>1,:updated_at.gte=>Time.now.at_beginning_of_day).count
+ 
 puts "daylycount=#{daily_count}"
-if daily_count>0
+if daily_count>800
 puts "we are done for today"
 exit
 end
-
+start=Time.now
 Mphone.where(:scount=>nil,:operator=>1).limit(1).each do |phone|
-
 begin 
-     puts " sending to #{phone.mphone} ,count1=#{Mphone.where(:scount=>1).count}, count0=#{Mphone.where(:scount=>nil).count}"  	  
+     puts "daily_count=#{daily_count} to #{phone.mphone}"  	  
 	 advertise="物流零距离网-http://w090.com免费提供大量的货源和车源信息,为您的物流事业助上一臂之力,欢迎您的访问!"	
 	 #command="sms.bat"+" "+"15967126712"+" "+advertise
 	  command="sms.bat"+" "+phone.mphone+" "+advertise 
@@ -40,15 +41,19 @@ begin
      end	 
 	 sendsms_command.join  
 	 phone.update_attribute(:scount,1)
-     sleep 25	 
+	 puts "send one msg time=#{Time.now-start} second!!"
+     sleep 30	 
   	 rescue
      puts "Exception in send sms"
       puts $@
+	  fail_count+=1
+	  exit if fail_count>10 #auto exit if too much fail there
+	   sleep 25	
     end
 end
 else
-puts "sleep 120second"
-sleep 120
+puts "sleep 300 second"
+sleep 300
 
 end
 end

@@ -58,7 +58,7 @@ public class test
 		   	System.out.println(s[0]);
 		   	System.out.println(s[1]);
 		   	System.out.println(s[2]);
-			System.out.println("jump out of while");
+			//System.out.println("jump out of while");
 			break;
 			//System.exit(0);
 			//System.out.println("jump out of while done");
@@ -77,7 +77,7 @@ public class test
 		   	);
 		   try{Thread.sleep(5000);}catch(InterruptedException e){} //延时等待
 		}
-		System.out.println("java is done");
+		//System.out.println("java is done");
 		System.exit(0);
 	    } else {
 		System.out.println("提交错误, rc="+rc);
@@ -86,10 +86,10 @@ public class test
 	    }
 	} else {
 	    System.out.println("初始化错误!"+rc);
-		System.out.println("java is done");
+		//System.out.println("java is done");
 		System.exit(0);
 	}  
-  System.out.println("java is done");
+  //System.out.println("java is done");
 		System.exit(0);	
     }
 }
