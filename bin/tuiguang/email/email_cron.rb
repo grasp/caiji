@@ -60,7 +60,7 @@ Forever.run do
       puts "mail sent error!"
     end    
   end
- every 1.day, :at => ['10:00'] do
+ every 1.day, :at => ['11:00'] do
    Notifier.tuiguang_email("hunter.wxhu@gmail.com").deliver!
    Notifier.tuiguang_email("179743816@qq.com").deliver!
   end

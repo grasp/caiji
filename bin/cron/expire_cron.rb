@@ -2,6 +2,9 @@
 require 'rubygems'
 require 'pathname'
 require 'forever'
+
+#note: This cron is to expire local grased cargo and truck to avoid repeat upload to post w090.com
+
 pn = Pathname.new(File.dirname(__FILE__))
 project_root=pn.parent.parent #do we have one line solution?
 require File.join(project_root,"bin","cron","cron_init.rb")
