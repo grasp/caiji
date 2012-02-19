@@ -29,7 +29,7 @@ logger.info "try start email cron #{Time.now}"
 end
 
 unless check_process.match(/daily_backup_cron\.rb/m)
-`ruby /opt/vob/caiji/bin/tuiguang/email/daily_backup_cron.rb`
+`ruby /opt/vob/caiji/bin/cron/daily_backup_cron.rb`
 logger.info "try start daily_backup cron #{Time.now}"
 end
 
