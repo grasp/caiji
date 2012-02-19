@@ -58,9 +58,12 @@ Forever.run do
     mail_cron
     rescue
       puts "mail sent error!"
-    end
+    end    
   end
-  
+ every 1.day, :at => ['10:00'] do
+   Notifier.tuiguang_email("hunter.wxhu@gmail.com").deliver!
+   Notifier.tuiguang_email("179743816@qq.com").deliver!
+  end
   on_error do |e|
     puts "Boom raised: #{e.message} #{Time.now}"
   end
