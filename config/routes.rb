@@ -1,5 +1,6 @@
 Caiji::Application.routes.draw do
   
+     match '/contact_rules/emails' => 'contact_rules#emails'
      match '/contact_rules/run_contact_rule/:id' => 'contact_rules#run_contact_rule'
      match '/contact_rules/get_all_contact/:from_site' => 'contact_rules#get_all_contact'
      

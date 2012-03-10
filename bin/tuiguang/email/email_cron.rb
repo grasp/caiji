@@ -45,7 +45,6 @@ Email.where(:valid.ne=>false,:scount=>nil).limit(1).each do |email|
     break;
   else
    send_one_tuiguang_email(email.address)
-#    send_one_tuiguang_email("hunter.wxhu@gmail.com")
     email.update_attribute(:scount,1)
   end
 end

@@ -1,0 +1,29 @@
+<p>email address nil:<%=Email.where(:address=>nil).count%> </p>
+<p>email true:<%=Email.where(:valid=>true).count%> </p>
+<p>email false:<%=Email.where(:valid=>false).count%> </p>
+<h1>List all Emails</h1>
+
+<table>
+  <tr>
+    <th>address</th>
+    <th>domain</th>
+    <th>valid</th>
+    <th>scount</th>
+      <th>created</th>
+       <th>updated</th>
+  </tr>
+  <%@emails.each do |email|%>
+    <tr>
+      <td>      <%=email.address%>    </td>
+      <td>      <%=email.domain%>    </td>
+      <td>      <%=email.valid%>    </td>
+      <td>      <%=email.scount%>    </td>
+      <td>      <%=email.created_at%>    </td>
+       <td>      <%=email.updated_at%>    </td>
+    </tr>
+  <%end%>
+</table>
+
+<%= will_paginate @emails ,:previous_label=>"上一页",:next_label=>"下一页"%>
+
+

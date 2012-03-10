@@ -6,12 +6,11 @@ module ContactRulesHelper
   #illegal character stoped page pase, we only get partial html , we have to refer open-uri to filter those illegal charater
   #we have to parse by ourself through raw html page
   def run_56135_contact_rule
-
     #totally 9189
     Encoding.default_internal="UTF-8"
     @page_count=get_last_page_number_of_contact("56135")
     @page_count.downto(1).each do |i|
-          @all_raw_contact=Array.new
+    @all_raw_contact=Array.new
     mark_parsed_link=Array.new      
       response=String.new  
       puts "56135 start grasp page #{i}"
@@ -32,15 +31,19 @@ module ContactRulesHelper
         #   @logger.info company_link
         mark_parsed_link<<company_link
         response2=String.new
-        #still use ugly way    
+        #still use ugly way   
+           begin
         open(company_link,:proxy =>@proxy){|f|          
-          begin
+       
             f.each_line {|line| response2<<line}         
-          rescue
+      
+        }  
+            rescue
           end
-        }      
+        begin
         # @logger.info response2
-        #<span id="l_companyTitle">嘉美物流有限公司</span>        
+        #<span id="l_companyTitle">嘉美物流有限公司</span>   
+        
         response2.scan(/\<span\sid=\"l_memberlink\"\>.*\<\/span\>/imx).each do |matched|
           # @logger.info  matched.to_s
           begin
@@ -62,7 +65,8 @@ module ContactRulesHelper
           @logger.info one_contact
           @all_raw_contact<< one_contact
           
-          
+        end
+                rescue
         end
       end
       # puts   "start save contact"   
@@ -408,14 +412,16 @@ module ContactRulesHelper
      
   end
   
+  def run_wutong_contact_rule
+    
+  end
   def save_contact
-    puts "save conact"
+    puts "save conact for size=#{@all_raw_contact.size}"
     @all_raw_contact.each do |contact|
       begin
         @logger.info "save conact #{contact}"   
         Contact.create!(contact)
-        #   Contact.new(contact).save!
-        
+        #   Contact.new(contact).save!        
       rescue
         @logger.info "exception in save contact"
         @logger.info $@

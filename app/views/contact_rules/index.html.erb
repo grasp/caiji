@@ -1,20 +1,6 @@
+<p>Email sented:<%=Email.where(:scount=>nil).count%>,total email=<%=Email.count%>,valid email=<%=Email.where(:valid.ne=>false).count%></p>
 <h1>Listing contact_rules</h1>
-<p>
-  <%all=Contact.count%>
-  Total:<%=all%>
-</p>
-<p>mphone:<%=Contact.where(:mphone.ne=>nil).count%></p>
- <p>email:<%=Contact.where(:email.ne=>nil).count%></p>
- <p>QQ:<%=Contact.where(:QQ.ne=>nil).count%></p>
- 
-  <p>filtered email=<%=Email.count%>,false email=<%=Email.where(:valid=>false).count%>,true email=<%=Email.where(:valid=>true).count%></p>
-  <p>filtered mphone=<%=Mphone.count%>,yidong=<%=Mphone.where(:operator=>1).count%>,liantong=<%=Mphone.where(:operator=>2).count%>
-   dianxin=<%=Mphone.where(:operator=>3).count%>,other=<%=Mphone.where(:operator=>0).count%>
-  </p>
-  <p>
-    mphone not sent=<%=Mphone.where(:scount=>nil).count%>
-    mphone sent one=<%=Mphone.where(:scount=>1).count%>
-  </p>
+
   <p>
   <ul>
     http://www.huisun.com/company/</ul>
@@ -56,13 +42,13 @@
   <tr>
     <td><a  class="btn default" href="/contact_rules/run_contact_rule/<%=contact_rule.id%>" target="_blank">Run</a></td>
     <td><a  class="btn default" href="/contact_rules/get_all_contact/<%=contact_rule.sitename%>" target="_blank">Contacts</a></td>
-     <td><%= sitecount %>-<%=((sitecount/all).to_f)*100%>%</td>
-           <td><%= Contact.where(:mphone.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
+     <td><%=sitecount%></td>
+     <td><%= Contact.where(:mphone.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
   <td><%= Contact.where(:email.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
    <td><%= Contact.where(:QQ.ne=>nil,:from_site=>contact_rule.sitename).count %></td>
     <td><%= contact_rule.sitename %></td>
     <td><%= contact_rule.rulename %></td>
-        <td><%= contact_rule.last_page %></td>
+      <td><%= contact_rule.last_page %></td>
     <td><%= contact_rule.caiji_freq %></td>
     <td><%= contact_rule.need_post %></td>
     <td><%= contact_rule.post_freq %></td>
@@ -71,11 +57,11 @@
     <td><%= contact_rule.report_phone %></td>
 
 
-    <td><%=Contact.where(:from_site=>contact_rule.sitename).count%>
-     <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_day).count%>
-     <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_week).count%>
-  <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_month).count%>
- <td><%=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_year).count%>
+    <td><%#=Contact.where(:from_site=>contact_rule.sitename).count%>
+     <td><%#=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_day).count%>
+     <td><%#=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_week).count%>
+  <td><%#=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_month).count%>
+ <td><%#=Contact.where(:from_site=>contact_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_year).count%>
     <td><%= contact_rule.repeat_count %></td>
     <td><%= link_to 'Show', contact_rule %></td>
     <td><%= link_to 'Edit', edit_contact_rule_path(contact_rule) %></td>

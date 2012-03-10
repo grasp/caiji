@@ -3,10 +3,16 @@ class ContactRulesController < ApplicationController
   # GET /contact_rules.json
   include ContactRulesHelper
   include CaijiHelper
+  include EmailHelper
   layout 'caiji'
+  
+  def emails
+    clear_nil_address_email
+    @emails=Email.all.paginate(:page=>params[:page]||1,:per_page=>50)
+  end
+  
   def index
     @contact_rules = ContactRule.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @contact_rules }
@@ -21,6 +27,10 @@ class ContactRulesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @contact_rule }
     end
+  end
+  
+  def count_contact
+     @contact_rules = ContactRule.all
   end
 
   # GET /contact_rules/new
