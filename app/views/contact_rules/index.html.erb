@@ -1,4 +1,6 @@
-<p>Email sented:<%=Email.where(:scount=>nil).count%>,total email=<%=Email.count%>,valid email=<%=Email.where(:valid.ne=>false).count%></p>
+<p>Email sented:<%=Email.where(:scount=>1).count%>,total email=<%=Email.count%>,valid email=<%=Email.where(:valid=>true).count%>
+false email=<%=Email.where(:valid=>false).count%>
+</p>
 <h1>Listing contact_rules</h1>
 
   <p>

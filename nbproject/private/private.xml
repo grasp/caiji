@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/D:/vob/caiji/app/helpers/contact_rules_helper.rb</file>
+        <file>file:/D:/vob/caiji/bin/tuiguang/email/email_cron.rb</file>
+        <file>file:/D:/vob/caiji/app/views/common/_topnavi.erb</file>
+        <file>file:/D:/vob/caiji/app/controllers/contact_rules_controller.rb</file>
+        <file>file:/D:/vob/caiji/app/views/contact_rules/emails.html.erb</file>
+        <file>file:/D:/vob/caiji/app/helpers/caiji_helper.rb</file>
+        <file>file:/D:/vob/caiji/config/mongoid.yml</file>
+    </open-files>
 </project-private>
