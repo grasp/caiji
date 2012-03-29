@@ -44,20 +44,17 @@ end
 $invalid=0;
 
  
-Email.where(:valid=>false).each do |email|   
+Email.where(:valid=>true,:scount=>1).each do |email|   
   #validate email format
 
-  unless EmailAddressValidator.validate_2822_addr(email.address,false)
-    $invalid+=1
-    puts "#{email.address} is  not valid"
-    email.address.nil? ? $format_invalid_nil+=1 :  $format_invalid_not_nil+=1
-    email.update_attribute(:valid,false)
-    next;
-  else
-    puts "we found #{email.address} is true"
-    email.update_attribute(:valid,true)
-    puts "email.valid=#{email.valid}"
-  end    
+   if not EmailCheck.run(email.address,"w090.001@gmail.com",domain).valid?
+  $invalid+=1
+  puts " emailbox #{email.address} not valid"
+  email.update_attribute(:valid,false)
+     next;
+else
+  email.update_attribute(:valid,true)
+end
 
 end
 puts "not valide=#{Email.where(:valid=>false).count}"

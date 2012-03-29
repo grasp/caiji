@@ -15,13 +15,15 @@ module ContactRulesHelper
       response=String.new  
       puts "56135 start grasp page #{i}"
       begin
-      open("http://www.56135.com/56135/company/companyindex/////#{i}.html",:proxy =>@proxy) {|f|          
+      open("http://www.56135.com/56135/company/companyindex/////#{i}.html") {|f|          
         begin
           f.each_line {|line| response<<line}         
-        rescue          
+        rescue    
+            puts "excetption meeted 1 "
         end
       }
       rescue
+          puts "excetption meeted 2"
         next
       end
       response.scan(/\/56135\/company\/member\/.\d\d\d+\.html/imx).each do |matched|
@@ -33,12 +35,13 @@ module ContactRulesHelper
         response2=String.new
         #still use ugly way   
            begin
-        open(company_link,:proxy =>@proxy){|f|          
+        open(company_link){|f|        
        
             f.each_line {|line| response2<<line}         
       
         }  
             rescue
+              puts "excetption meeted 3"
           end
         begin
         # @logger.info response2
@@ -54,12 +57,14 @@ module ContactRulesHelper
             begin
               one_contact[:personname].gsub("联系人：","").gsub(/\<br\>/,"").gsub(/\<br\>/,"").strip unless  one_contact[:personname].blank?
             rescue
+                puts "excetption meeted"
             end
             one_contact[:fixphone] = one_contact[:fixphone].gsub("电话：","").gsub(/\</,"").gsub(/\W/,"") unless one_contact[:fixphone].blank? 
             one_contact[:mphone] = one_contact[:mphone].gsub("手机：","").gsub(/\</,"").gsub(/\W/,"") unless one_contact[:mphone].blank? 
             one_contact[:email] = one_contact[:email].gsub("mailto:","").gsub(/\>/,"").gsub(/\W$/,"") unless one_contact[:email].blank? 
           rescue
             #just continue
+              puts "excetption meeted"
           end
           one_contact[:from_site]="56135"  
           @logger.info one_contact

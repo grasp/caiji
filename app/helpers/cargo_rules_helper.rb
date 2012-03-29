@@ -1,4 +1,5 @@
 #coding:utf-8
+require 'active_support'
 module CargoRulesHelper
   include CaijiHelper
   def run_tf56_cargo_rule
@@ -72,30 +73,42 @@ module CargoRulesHelper
   def run_56qq_cargo_rule
     @all_raw_cargo=Array.new 
     #cid	-1 fs	30 pid	11
-    pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
+  #  pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
+  pid_list=[11]      
     @mechanize.cookies.each do |cookie|  #56qq use javascript to write pid into cookie to judge which province or city user want to view,so we have to do by ourself
       if cookie.domain=="www.56qq.cn"
         #  @logger.info   cookie.name
         #  @logger.info   cookie.value
       end
     end
-    @mechanize.get("http://www.56qq.cn")# do |page|  #for generate a history, so setcookie will not raise history empty exception
+    @mechanize.get("http://www.56qq.cn/#msgboard/list/c")# do |page|  #for generate a history, so setcookie will not raise history empty exception
   #  end     
     pid_list.each do |pid|
-      set_cookie("www.56qq.cn","pid",pid)
-      set_cookie("www.56qq.cn","cid",-1)  
-      @mechanize.get("http://www.56qq.cn") do |page| 
-        page.parser.css("div.entry").each do |entrycontainer|
+    #  set_cookie("www.56qq.cn","pid",pid)
+     # set_cookie("www.56qq.cn","cid",-1)  
+    #  @mechanize.get("http://www.56qq.cn") 
+    @logger.info @mechanize.get("http://www.56qq.cn/pagelet/common/regions?v=20110513").body
+   result=  @mechanize.get("http://www.56qq.cn/logistics/message/query?pid=28&t=C&fs=30") 
+ #result.body
+   "http://www.56qq.cn/pagelet/common/regions?v=20110513"
+   # eval(result.body).to_hash
+ parsed_json = ActiveSupport::JSON.decode(result.body)
+ parsed_json["content"]["msgs"].each do |item_huo|
+    @logger.info item_huo
+ end
+page=nil
+   if page
+           page.parser.css("div.entry").each do |entrycontainer|
           timetag=entrycontainer.css("div.entry_date").text
-          raw_array= [ entrycontainer.css("span.entry_city").text.strip.gsub(/\r\n/,"")  ,
-            entrycontainer.css("span.spanentry_text").text.strip.gsub(/\r\n/,"") ,
+            raw_array= [ entrycontainer.css(".entry_city").text.strip.gsub(/\r\n/,"")  ,
+          entrycontainer.css("span.spanentry_text").text.strip.gsub(/\r\n/,"") ,
             entrycontainer.css("span.cred").text.strip.gsub(/\r\n/,"")  
           ]        
-  
+      @logger.info  raw_array
           parse_56qq_line(raw_array[0]).each do |line|
             if raw_array[1].match("货源信息")
               onecargo=[line,raw_array[1], raw_array[2]]
-              if !onecargo[0][0].nil? and !onecargo[0][1].nil?
+                if !onecargo[0][0].nil? and !onecargo[0][1].nil?
                 cargo=Hash.new 
                 cargo[:fcity_code]=onecargo[0][0]
                 cargo[:tcity_code]=onecargo[0][1]
@@ -126,7 +139,10 @@ module CargoRulesHelper
                   cargo[:timetag]=a.month.to_s+"月"+a.day.to_s+"日"+timetag.delete("昨天")                                
                 end
                 cargo[:user_id]="4e24c1d47516fd513c000002" #admin id
-                @all_raw_cargo<<cargo if  cargo.length>0   #at least something is there              
+                if  cargo.length>0   #at least something is there              
+                @all_raw_cargo<<cargo 
+                puts "cargo =#{cargo}"
+                end
               end
             end
           end  

@@ -9,5 +9,8 @@
         <file>file:/D:/vob/caiji/app/views/contact_rules/emails.html.erb</file>
         <file>file:/D:/vob/caiji/app/helpers/caiji_helper.rb</file>
         <file>file:/D:/vob/caiji/config/mongoid.yml</file>
+        <file>file:/D:/vob/caiji/bin/tuiguang/email/validate_false_email_again.rb</file>
+        <file>file:/D:/vob/caiji/bin/tuiguang/email/validate_email_2.rb</file>
+        <file>file:/D:/vob/caiji/bin/tuiguang/email/validate_email.rb</file>
     </open-files>
 </project-private>

@@ -4,6 +4,11 @@ require 'rubygems'
 require 'pathname'
 require 'forever'
 require "action_mailer"
+
+require 'resolv'
+require 'email_address_validator'#check format ,domain and mx record
+require 'email_check' #connect to email server to check
+
 pn = Pathname.new(File.dirname(__FILE__))
 project_root=pn.parent.parent.parent #do we have one line solution?
 require File.join(project_root,"bin","cron","cron_init.rb")
@@ -40,13 +45,13 @@ end
 
 def mail_cron
 Email.where(:valid.ne=>false,:scount=>nil).limit(1).each do |email|
-  daily_count=Email.where(:valid.ne=>false,:scount=>1,:updated_at.gte=>Time.now.at_beginning_of_day).count
-  if daily_count>3000 #daily sent 3000
-    break;
-  else
+ # daily_count=Email.where(:valid.ne=>false,:scount=>1,:updated_at.gte=>Time.now.at_beginning_of_day).count
+#  if daily_count>3000 #daily sent 3000
+  #  break;
+ # else
    send_one_tuiguang_email(email.address)
     email.update_attribute(:scount,1)
-  end
+ # end
 end
 end
 

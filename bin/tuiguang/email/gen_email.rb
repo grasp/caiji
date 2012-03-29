@@ -15,9 +15,8 @@ require File.join(project_root,"app","helpers","contact_rules_helper.rb")
 #puts "project_root=#{project_root}"
 #for each contact get email and put it into email for tuiguang
 Contact.where(:email.ne=>nil,:genemail.ne=>true).each do |contact|
-  if contact.email.match(/@/)
-    Email.create(:address=>contact.email)
- 
+  if contact.email.match(/@/) 
+    Email.create(:address=>contact.email) 
   end
      contact.update_attribute(:genemail,true)
 end
