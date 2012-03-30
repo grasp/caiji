@@ -69,12 +69,12 @@ module CargoRulesHelper
     #save database and post those successful    
     save_cargo(@all_raw_cargo)
   end
-  
+
   def run_56qq_cargo_rule
     @all_raw_cargo=Array.new 
     #cid	-1 fs	30 pid	11
-  #  pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
-  pid_list=[11]      
+    pid_list=[11,12,13,15,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,41,42,43,51,52,53,54,61,62,63,64,65]      
+ # pid_list=[11]      
     @mechanize.cookies.each do |cookie|  #56qq use javascript to write pid into cookie to judge which province or city user want to view,so we have to do by ourself
       if cookie.domain=="www.56qq.cn"
         #  @logger.info   cookie.name
@@ -84,43 +84,60 @@ module CargoRulesHelper
     @mechanize.get("http://www.56qq.cn/#msgboard/list/c")# do |page|  #for generate a history, so setcookie will not raise history empty exception
   #  end     
     pid_list.each do |pid|
-    #  set_cookie("www.56qq.cn","pid",pid)
-     # set_cookie("www.56qq.cn","cid",-1)  
-    #  @mechanize.get("http://www.56qq.cn") 
-    @logger.info @mechanize.get("http://www.56qq.cn/pagelet/common/regions?v=20110513").body
-   result=  @mechanize.get("http://www.56qq.cn/logistics/message/query?pid=28&t=C&fs=30") 
- #result.body
-   "http://www.56qq.cn/pagelet/common/regions?v=20110513"
-   # eval(result.body).to_hash
- parsed_json = ActiveSupport::JSON.decode(result.body)
- parsed_json["content"]["msgs"].each do |item_huo|
-    @logger.info item_huo
- end
-page=nil
-   if page
-           page.parser.css("div.entry").each do |entrycontainer|
-          timetag=entrycontainer.css("div.entry_date").text
-            raw_array= [ entrycontainer.css(".entry_city").text.strip.gsub(/\r\n/,"")  ,
-          entrycontainer.css("span.spanentry_text").text.strip.gsub(/\r\n/,"") ,
-            entrycontainer.css("span.cred").text.strip.gsub(/\r\n/,"")  
-          ]        
-      @logger.info  raw_array
-          parse_56qq_line(raw_array[0]).each do |line|
-            if raw_array[1].match("货源信息")
-              onecargo=[line,raw_array[1], raw_array[2]]
-                if !onecargo[0][0].nil? and !onecargo[0][1].nil?
+      set_cookie("www.56qq.cn","pid",pid)
+      set_cookie("www.56qq.cn","cid",-1)  
+      @mechanize.get("http://www.56qq.cn") 
+    city_list= @mechanize.get("http://www.56qq.cn/pagelet/common/regions?v=20110513").body
+     @flatter_city=Hash.new
+     parsed_citylist = ActiveSupport::JSON.decode( city_list)
+      parsed_citylist.each do |province|      
+        @flatter_city[province["id"].to_s]=province["name"]
+       province["children"].each do |region|
+          @flatter_city[region["id"].to_s]=region["name"]
+          region["children"].each do |city|
+           #  @logger.info city["id"].to_s+"#{city["name"]}"
+             @flatter_city[city["id"].to_s]=city["name"]
+          end
+       end
+      end
+     # @logger.info @flatter_city
+   result=  @mechanize.get("http://www.56qq.cn/logistics/message/query?pid=#{pid}&t=C&fs=30") 
+
+ parsed_huo = ActiveSupport::JSON.decode(result.body)
+ parsed_huo["content"]["msgs"].each do |onecargo|
+  #  @logger.info onecargo
+    from_city=onecargo["dep"].to_s.split(",")
+    to_city=onecargo["dest"].split(",")
+   #  @logger.info from_city.to_s+"to"+to_city.to_s
+      #  @logger.info onecargo["dep"].to_s+"#{onecargo['dest']}"
+    from_city.each_index do |index|
+      from_city[index]=  @flatter_city[from_city[index]]
+    #  @logger.info from_city[index].to_s+"#{@flatter_city[from_city[index]]}"
+    end
+       to_city.each_index do |index|
+      to_city[index]=  @flatter_city[to_city[index]]
+     #  @logger.info to_city[index].to_s+"#{@flatter_city[to_city[index]]}"
+    end
+#@logger.info from_city
+#@logger.info to_city
+#if false
+          parse_56qq_line(from_city,to_city).each do |line|
+          #  if raw_array[1].match("货源信息")
+            #  onecargo=[line,raw_array[1], raw_array[2]]
+                if !line[0].nil? and !line[1].nil?
                 cargo=Hash.new 
-                cargo[:fcity_code]=onecargo[0][0]
-                cargo[:tcity_code]=onecargo[0][1]
+                cargo[:fcity_code]=line[0]
+                cargo[:tcity_code]=line[1]
                 cargo[:line]=(cargo[:fcity_code]||"")+"#"+(cargo[:tcity_code]||"")
                 cargo[:fcity_name]=get_city_full_name(cargo[:fcity_code]) unless cargo[:fcity_code].nil?
                 cargo[:tcity_name]=get_city_full_name(cargo[:tcity_code]) unless cargo[:tcity_code].nil? 
                 #   @logger.info "#{cargo[:fcity_name]}-#{cargo[:tcity_name]}"
-                cargo[:comments]=onecargo[1].gsub(/货源信息：/,"").gsub(/备注内容：/,"").gsub(/联系我时，请说是在56QQ上看到的，谢谢！/,"").gsub(/\s/,"")
-                cargo[:cargo_weight]=onecargo[1].match(/\d\d\d吨|\d\d吨|\d吨|\d方|\d\d方/).to_s
+                #cargo[:comments]=onecargo[1].gsub(/货源信息：/,"").gsub(/备注内容：/,"").gsub(/联系我时，请说是在56QQ上看到的，谢谢！/,"").gsub(/\s/,"")
+              cargo[:comments]= onecargo["c"]
+              cargo[:cargo_weight]=cargo[:comments].match(/\d\d\d吨|\d\d吨|\d吨|\d方|\d\d方/).to_s
                 cargo[:cate_name]=cargo[:comments].to_s[-10..-1]
-                cargo[:contact]=onecargo[2].gsub(/TEL\:/,"") 
-      
+               # cargo[:contact]=onecargo[2].gsub(/TEL\:/,"") 
+              cargo[:contact]=onecargo["m"] ||""+onecargo["tel"] ||""
                 #fetch mobilephone and fixphone
                 cargo[:mobilephone]=cargo[:contact].match(/1\d\d\d\d\d\d\d\d\d\d/).to_s
                 cargo[:fixphone]=cargo[:contact].match(/\d\d\d+-\d\d\d\d\d\d\d+/).to_s  
@@ -129,23 +146,24 @@ page=nil
                 cargo[:created_at]=Time.now
                 cargo[:status]="正在配车"  # for match local
                 cargo[:priority]=300
-                cargo[:timetag]=timetag # which time it is generated
-                a=Time.now
-                if timetag.match("上午")||timetag.match("下午")
-                  cargo[:timetag]=a.month.to_s+"月"+a.day.to_s+"日"+timetag                                
-                end
-                if timetag.match("昨天")
-                  a=a-86400
-                  cargo[:timetag]=a.month.to_s+"月"+a.day.to_s+"日"+timetag.delete("昨天")                                
-                end
+                cargo[:timetag]=Time.now # which time it is generated
+               # a=Time.now
+               # if timetag.match("上午")||timetag.match("下午")
+               #   cargo[:timetag]=a.month.to_s+"月"+a.day.to_s+"日"+timetag                                
+              #  end
+             #   if timetag.match("昨天")
+               #   a=a-86400
+                #  cargo[:timetag]=a.month.to_s+"月"+a.day.to_s+"日"+timetag.delete("昨天")                                
+               # end
                 cargo[:user_id]="4e24c1d47516fd513c000002" #admin id
                 if  cargo.length>0   #at least something is there              
                 @all_raw_cargo<<cargo 
-                puts "cargo =#{cargo}"
-                end
+              #  @logger.info cargo
+               # puts "cargo =#{cargo}"
               end
+             #   end
+             # end
             end
-          end  
         end
       end
     end   

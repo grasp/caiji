@@ -100,13 +100,13 @@ end
     return [city_from_code,city_to_code] 
   end
 
-  def parse_56qq_line(line)
+  def parse_56qq_line(from_city,to_city)
     all_line=Array.new
-    raw_line=line.gsub(/\[|\]/,"")
-    city_from=raw_line.split("-")[0]
-    city_to=raw_line.split("-")[1].split(",")
-    city_to.each do |tocity|
-    all_line<<[city_from,tocity]
+   # raw_line=line.gsub(/\[|\]/,"")
+   # city_from=raw_line.split("-")[0]
+ #   city_to=raw_line.split("-")[1].split(",")
+    to_city.each do |tocity|
+    all_line<<[from_city[0],tocity]
     end
     # convert all line to city code
     city_code_line=Array.new
