@@ -26,6 +26,7 @@
     <th>Failreport</th>
     <th>Remail</th>
     <th>Rphone</th>   
+    <th>ispeihuoing</th>
     <th>Totalcaiji</th>
     <th>Totalpost</th>
     <th>Today</th>
@@ -55,7 +56,7 @@
     <td><%= cargo_rule.fail_report %></td>
     <td><%= cargo_rule.report_email %></td>
     <td><%= cargo_rule.report_phone %></td>
-   
+     <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:status=>"正在配车").count%>
     <td><%=Cargo.where(:from_site=>cargo_rule.sitename).count%>
     <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:posted=>"yes").count%>
      <td><%=Cargo.where(:from_site=>cargo_rule.sitename,:created_at.gte=>Time.now.at_beginning_of_day).count%>

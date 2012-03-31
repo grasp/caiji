@@ -28,7 +28,6 @@ Forever.run do
       begin
        CronCargo.new.cargo_cron("tf56","tf56cargo")
        CronCargo.new.cargo_cron("56qq","56qqcargo")
-       CronCargo.new.cargo_cron("56135","56135cargo")
       rescue
         puts $@
       end  
@@ -42,6 +41,7 @@ Forever.run do
     hour=Time.now.hour
     if hour>6 and hour<22
       begin
+       CronCargo.new.cargo_cron("56135","56135cargo")
        CronCargo.new.cargo_cron("quzhou","quzhoucargo")
        CronCargo.new.cargo_cron("haoyun56","haoyuncargo")
       rescue

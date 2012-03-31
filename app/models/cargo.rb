@@ -75,17 +75,19 @@ class  Cargo
    # repeated=Cargo.where(:cate_name=>self.cate_name,:line=>self.line,:user_id=>self.user_id,:status=>"正在配车",
    #   :contact=>self.contact,:comments=>self.comments,:from_site=>self.from_site ).count 
         repeated=Cargo.where(:cate_name=>self.cate_name,:line=>self.line,:user_id=>self.user_id,:status=>"正在配车",
-     :contact=>self.contact,:from_site=>self.from_site ).count 
-    puts "repeated=#{repeated}"
-  if  repeated > 0
-    if Time.now-repeated.created_at<900
-      puts "repeated=#{repeated}"
-        errors.add(:base,"不能重复发布货源信息,请至少间隔15分钟后再重复发布")
-      return false
-    end 
+     :contact=>self.contact,:from_site=>self.from_site ).first 
+ #puts "repeated=#{repeated}"
+ 
+  if  repeated.nil?
+     return true
+  elsif Time.now-repeated.created_at>900
+    #  puts "repeated=#{repeated}"
+     #   errors.add(:base,"不能重复发布货源信息,请至少间隔15分钟后再重复发布")
+      return true
+  else
       return false
   end
-      return true
+return false
   end
   def expire
  begin
