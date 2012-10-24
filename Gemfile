@@ -49,6 +49,6 @@ gem 'redis'
 gem 'redis-store'
 gem "will_paginate"#, "~> 3.0.pre4"
 
-gem "email_address_validator"
-gem 'email_veracity_checker'
+#gem "email_address_validator"
+#gem 'email_veracity_checker'
 

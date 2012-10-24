@@ -6,7 +6,7 @@ class Mphone
   field :valid,:type=>Boolean
   field :operator,:type=>Integer
   field :scount,:type=>Integer
-  index:mphone
-    validates_uniqueness_of :mphone
+  index:mphone=>1
+  validates_uniqueness_of :mphone
 end
 

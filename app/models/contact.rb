@@ -26,11 +26,12 @@ class  Contact
   field :qqsent, :type=>Integer
   field :gen, :type=>Integer#makr it as generated, as gen phone always interuppted
   field :genemail, :type=>Integer#makr it as generated, as gen phone always interuppted
-  index :created_at
-  index :from_site
-  index :mphone
-  index :QQ
-  index :email
+  index({ created_at: 1})
+
+  index :from_site=>1
+  index :mphone=>1
+  index :QQ=>1
+  index :email=>1
  before_create :check_unique
 #validates_uniqueness_of :mphone
   def check_unique

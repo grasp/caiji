@@ -6,7 +6,7 @@ class Email
   field :domain,:type=>String
   field :valid,:type=>Boolean
   field :scount,:type=>Integer  
-  index :address
+  index :address=>1
     validates_presence_of :address  
   validates_uniqueness_of :address
 

@@ -1,0 +1,27 @@
+defaults: &defaults
+  host: localhost
+  #host: 192.168.2.4
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
+
+development:
+  <<: *defaults
+  database: caiji_development
+
+test:
+  <<: *defaults
+  database: caiji_test
+
+# set these environment variables on your prod server
+#!!! work around here, temp solution
+production:
+  <<: *defaults 
+  database: caiji_production
+  host: <%= ENV['MONGOID_HOST'] %>
+  port: <%= ENV['MONGOID_PORT'] %>
+  username: <%= ENV['MONGOID_USERNAME'] %>
+  password: <%= ENV['MONGOID_PASSWORD'] %>
+ # database: <%= ENV['MONGOID_DATABASE'] %>

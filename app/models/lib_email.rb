@@ -16,7 +16,7 @@ class LibEmail
   field :sent_counter,:type=>Integer
   field :status,:type=>String  
   field :subscribeyes
-  index :email,unique: true
-  index :created_at
+  index({ email: 1 }, { unique: true })
+  index :created_at=>1
    validates_uniqueness_of :email ,:message=>"email exisit"
 end

@@ -63,10 +63,11 @@ class  Cargo
   field :mobilephone, :type=>String
   field :fixphone, :type=>String
   
-  index :created_at
-  index :from_site
+  index :created_at=>1
+  index :from_site=>1
   
-  index ([[:from_site,Mongo::ASCENDING],[:updated_at,Mongo::ASCENDING],[:status,Mongo::ASCENDING],[:fcity_code,Mongo::ASCENDING],[:tcity_code,Mongo::ASCENDING]])
+  #index ([[:from_site,Mongo::ASCENDING],[:updated_at,Mongo::ASCENDING],[:status,Mongo::ASCENDING],[:fcity_code,Mongo::ASCENDING],[:tcity_code,Mongo::ASCENDING]])
+  index ({ from_site: -1, updated_at: 1,status: 1,fcity_code: 1,tcity_code: 1})
   #validates_presence_of :fcity_code,:tcity_code   #remove cate_name, could be empty from grasp
  
  before_create:check_unique

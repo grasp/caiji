@@ -8,13 +8,18 @@ module CaijiHelper
     Object::RUBY_PLATFORM.match("linux") ? @os="linux": @os="windows"
     if @os=="windows"
       ipconfig=`ipconfig -all |grep DNS`
-      ipconfig.match(/ds\.mot\.com/mi) ? @office=true : @office=false
+      puts "true or false ="
+      b=ipconfig.to_s.match(/nsn-net/).nil?
+      b ? @office=false : @office=true
     end
+
+    puts "office=#{@office}"
     
     if @os=="linux"
       ipconfig=`ifconfig -a`
       ipconfig.match(/10\.192/mi) ? @office=true : @office=false
     end
+     puts "office=#{@office},@os=#{@os}"
     return [@os,@office]
   end
   
@@ -22,17 +27,24 @@ module CaijiHelper
     if @os.nil? || @office.nil?
       env_info=get_env_information
       @os=env_info[0];@office=env_info[1]
-    end
-    cookie_dir ="C:\\Documents and Settings\\Administrator\\Application Data\\Mozilla\\Firefox\\Profiles\\tttk3240.default"  if @os=="windows" && @office==false
-    cookie_dir ="D:\\Profiles\\w22812\\Application Data\\Mozilla\\Firefox\\Profiles\\623tc49u.default"   if @os=="windows" && @office==true
+    end   
+    
+    cookie_dir ="C:\\Documents and Settings\\Administrator\\Application Data\\Mozilla\\Firefox\\Profiles\\tttk3240.default"  if (@os=="windows" && @office==false)
+
+
+    cookie_dir ="D:\\userdata\\w22812\\Application Data\\Mozilla\\Firefox\\Profiles\\iudeffo1.default"   if (@os=="windows" && @office==true)
+
     cookie_dir="/home/netmon/ului265f"   if @os=="linux" && @office==true
     cookie_dir ="/home/hunter/.mozilla/firefox/5vgx7pnx.default" if @os=="linux" && @office==false
     $cookie_dir=cookie_dir
+
     return cookie_dir
   end
   
   def load_cookie
-    $cookie_dir=get_cookie_dir if $cookie_dir.nil?
+
+    $cookie_dir=get_cookie_dir 
+    #puts "cookie dir =#{$cookie_dir}"
     if $cookie.nil?
     cookie = String.new  
     Dir.chdir($cookie_dir){|dir|  
@@ -46,8 +58,7 @@ module CaijiHelper
     $cookie= cookie
     end
     return $cookie
-  end
-  
+  end  
 
   
   def prepare_for_rule(logname)
@@ -62,16 +73,12 @@ module CaijiHelper
       @os=env_info[0];@office=env_info[1]
     end
     
-    @mechanize.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
-    @mechanizeb.set_proxy("wwwgate0-ch.mot.com", 1080) if @office==true
-    if  @office==true
-@proxy="http://wwwgate0-ch.mot.com:1080" 
-else
-  @proxy=nil
-end
+    @mechanize.set_proxy("10.144.1.10", 8080) if @office==true
+    @office==true ?   @proxy="http://10.144.1.10:8080" : @proxy=nil
+
     
     @mechanize.cookie_jar.load_cookiestxt(StringIO.new(load_cookie))  
-  @mechanize.user_agent_alias = 'Windows Mozilla'
+    @mechanize.user_agent_alias = 'Windows Mozilla'
   #   @mechanize.user_agent_alias = 'Windows IE 6'
   end
 

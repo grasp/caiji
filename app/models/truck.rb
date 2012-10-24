@@ -67,7 +67,9 @@ class Truck
       field  :user_id
       field  :stock_truck_id
       field  :user_contact_id
-      index ([[:from_site,Mongo::ASCENDING],[:updated_at,Mongo::ASCENDING],[:status,Mongo::ASCENDING],[:fcity_code,Mongo::ASCENDING],[:tcity_code,Mongo::ASCENDING]])
+     
+     # index ([[:from_site,Mongo::ASCENDING],[:updated_at,Mongo::ASCENDING],[:status,Mongo::ASCENDING],[:fcity_code,Mongo::ASCENDING],[:tcity_code,Mongo::ASCENDING]])
+  index({from_site: 1,updated_at: 1,status: 1,fcity_code: 1, tcity_code: 1})
   before_create:check_unique
   #after_save:expire
        

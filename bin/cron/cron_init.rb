@@ -18,7 +18,9 @@ require "sqlite3"
 #$db = $mongo.db('caiji_development')  #always development database
 #Mongoid.database = $db
 #Mongoid.database = Mongo::Connection.new('localhost', 27017).db('caiji_development') #first set as grasp
-Mongoid.database = Mongo::Connection.new('192.168.2.4', 27017).db('caiji_development') #first set as grasp
+
+Mongoid.load!("D:\\caiji\\config\\mongoid.yml", :development)
+#Mongoid.database = Mongo::Connection.new('192.168.2.4', 27017).db('caiji_development') #first set as grasp
 pn = Pathname.new(File.dirname(__FILE__))
 project_root=pn.parent.parent #do we have one line solution?
 

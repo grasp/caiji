@@ -37,8 +37,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.3.3)
-    email_address_validator (0.0.2)
-    email_veracity_checker (0.0.2)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -126,8 +124,6 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails
-  email_address_validator
-  email_veracity_checker
   execjs
   jquery-rails
   mechanize (= 2.0.1)

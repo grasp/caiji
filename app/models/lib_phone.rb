@@ -10,7 +10,8 @@ class LibPhone
   field :last_sent_time,:type=>String
   field :sent_counter,:type=>Integer
   field :status,:type=>String  
-  index :mphone,unique: true
-  index :created_at
+  #index ({mphone: 1} , {unique: true})
+  index({ mphone: 1 }, { unique: true })
+  index :created_at=>1
    validates_uniqueness_of :mphone ,:message=>"mobile phone exisit"
 end
